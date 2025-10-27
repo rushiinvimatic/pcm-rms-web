@@ -31,36 +31,37 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ variant = 'default' }) =
   return (
     <header 
       className={cn(
-        "w-full bg-white fixed top-0 left-0 z-10 transition-all duration-300",
-        isScrolled ? "shadow-md py-2" : "border-b border-gray-100 py-3"
+        "w-full bg-white fixed top-0 left-0 z-50 transition-all duration-300 border-b-2",
+        isScrolled ? "shadow-lg py-2 border-slate-200 bg-white/95 backdrop-blur-sm" : "border-amber-400 py-3"
       )}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link 
           to="/" 
-          className="flex items-center space-x-3 group"
+          className="flex items-center space-x-4 group"
           aria-label="Go to homepage"
         >
           <div className="transition-transform duration-300 group-hover:scale-105">
             <PMCLogo size="medium" />
           </div>
           <div className="transition-opacity duration-300 group-hover:opacity-90">
-            <h1 className="text-lg font-semibold text-gray-900">PMCRMS</h1>
-            <p className="text-xs text-gray-500">Pune Municipal Corporation</p>
+            <h1 className="text-lg font-bold text-slate-900">PCMC Registration Portal</h1>
+            <p className="text-xs text-amber-600 font-medium">Pimpri-Chinchwad Municipal Corporation</p>
+            <p className="text-xs text-slate-500">Government of Maharashtra</p>
           </div>
         </Link>
 
         {/* Desktop Navigation */}
         {variant === 'default' && (
           <nav className="hidden md:flex items-center space-x-8">
-            {['Home', 'Services', 'About Us', 'Contact'].map((item, index) => (
+            {['Citizen Services', 'Application Status', 'Support', 'About PCMC'].map((item, index) => (
               <Link 
                 key={index}
-                to={item === 'Home' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`} 
+                to={item === 'Citizen Services' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`} 
                 className={cn(
-                  "text-gray-600 font-medium text-sm relative py-2",
-                  "after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-blue-600 after:scale-x-0 after:origin-right",
-                  "hover:text-blue-600 hover:after:scale-x-100 hover:after:origin-left after:transition-transform after:duration-300"
+                  "text-slate-700 font-medium text-sm relative py-2 px-1",
+                  "after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-amber-500 after:scale-x-0 after:origin-right",
+                  "hover:text-slate-900 hover:after:scale-x-100 hover:after:origin-left after:transition-transform after:duration-300"
                 )}
               >
                 {item}
@@ -74,7 +75,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ variant = 'default' }) =
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="text-gray-600 hover:text-blue-600 focus:outline-none"
+            className="text-slate-700 hover:text-slate-900 focus:outline-none p-2 rounded-lg hover:bg-slate-100 transition-colors duration-200"
           >
             {!mobileMenuOpen ? (
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,7 +94,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ variant = 'default' }) =
           {variant === 'auth' ? (
             <Button
               variant="outline"
-              className="text-sm bg-white border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors duration-300"
+              className="text-sm bg-white border-2 border-slate-700 text-slate-700 hover:bg-slate-50 transition-colors duration-300 font-medium"
               asChild
             >
               <Link to={isOfficerLogin ? '/auth/login' : '/auth/officer-login'}>
@@ -104,14 +105,14 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ variant = 'default' }) =
             <>
               <Button 
                 variant="ghost" 
-                className="text-sm hover:text-blue-600 transition-colors duration-300" 
+                className="text-sm text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-300 font-medium" 
                 asChild
               >
                 <Link to="/auth/login">Login</Link>
               </Button>
               <Button 
-                variant="default" 
-                className="text-sm bg-blue-600 hover:bg-blue-700 transition-all duration-300 shadow-sm hover:shadow"
+                className="text-sm bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-white transition-all duration-300 shadow-md hover:shadow-lg font-medium px-6"
+                asChild
               >
                 <Link to="/auth/register">Register</Link>
               </Button>
@@ -124,33 +125,32 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ variant = 'default' }) =
       {variant === 'default' && (
         <div 
           className={cn(
-            "md:hidden bg-white absolute left-0 right-0 top-full border-b border-gray-100",
-            "overflow-hidden transition-all duration-300 shadow-md",
+            "md:hidden bg-white absolute left-0 right-0 top-full border-b-2 border-slate-200",
+            "overflow-hidden transition-all duration-300 shadow-lg backdrop-blur-sm",
             mobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
           )}
         >
-          <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            {['Home', 'Services', 'About Us', 'Contact'].map((item, index) => (
+          <nav className="container mx-auto px-4 py-6 flex flex-col space-y-4">
+            {['Citizen Services', 'Application Status', 'Support', 'About PCMC'].map((item, index) => (
               <Link 
                 key={index}
-                to={item === 'Home' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`}
-                className="text-gray-600 hover:text-blue-600 font-medium py-2 transition-colors duration-200"
+                to={item === 'Citizen Services' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`}
+                className="text-slate-700 hover:text-slate-900 font-medium py-3 px-2 transition-colors duration-200 border-l-2 border-transparent hover:border-amber-400"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item}
               </Link>
             ))}
-            <div className="pt-2 border-t border-gray-100 flex flex-col space-y-3">
+            <div className="pt-4 border-t border-slate-200 flex flex-col space-y-3">
               <Button 
                 variant="outline" 
-                className="w-full justify-center text-sm" 
+                className="w-full justify-center text-sm border-2 border-slate-700 text-slate-700 hover:bg-slate-50 font-medium" 
                 asChild
               >
-                <Link to="/auth/login" onClick={() => setMobileMenuOpen(false)}>Login</Link>
+                <Link to="/auth/login" onClick={() => setMobileMenuOpen(false)}>Citizen Login</Link>
               </Button>
               <Button 
-                variant="default" 
-                className="w-full justify-center text-sm bg-blue-600"
+                className="w-full justify-center text-sm bg-gradient-to-r from-slate-800 to-slate-900 text-white font-medium"
                 asChild
               >
                 <Link to="/auth/register" onClick={() => setMobileMenuOpen(false)}>Register</Link>
