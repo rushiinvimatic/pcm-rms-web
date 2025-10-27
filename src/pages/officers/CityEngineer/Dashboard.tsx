@@ -512,7 +512,7 @@ export const CityEngineerDashboard: React.FC = () => {
     }, 'Updating stage with digital signature (testing)...');
   };
 
-  const filteredApplications = getStageApplications(activeTab).filter(app => {
+  const filteredApplications = getStageApplications(activeTab).filter((app: any) => {
     if (filters.status && app.status !== filters.status) return false;
     if (filters.position && app.position !== filters.position) return false;
     if (filters.search && !app.applicantName.toLowerCase().includes(filters.search.toLowerCase()) && 

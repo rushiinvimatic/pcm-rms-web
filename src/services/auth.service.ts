@@ -75,6 +75,7 @@ export const authService = {
       refreshToken: string | null;
       email: string;
       role: string;
+      user: string;
     }>('/Auth/token', credentials);
     return response.data;
   },

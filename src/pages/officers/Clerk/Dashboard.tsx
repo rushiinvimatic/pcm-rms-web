@@ -16,7 +16,7 @@ import type { Application, OTPVerificationData } from '../../../types/dashboard'
 export const ClerkDashboard: React.FC = () => {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
+  const [selectedApplication, setSelectedApplication] = useState<Application | any>(null);
   const [certificateModal, setCertificateModal] = useState({
     isVisible: false,
     applicationId: '',
@@ -65,7 +65,7 @@ export const ClerkDashboard: React.FC = () => {
         }
         
         // Map applications to the expected format
-        const clerkApplications = applicationsData.map((app: any) => ({
+        const clerkApplications: any = applicationsData.map((app: any) => ({
           id: app.id,
           applicationNumber: app.applicationNumber || 'N/A',
           applicantName: `${app.firstName || ''} ${app.middleName || ''} ${app.lastName || ''}`.trim(),
@@ -225,7 +225,7 @@ export const ClerkDashboard: React.FC = () => {
     }, 'Updating stage with digital signature (testing)...');
   };
 
-  const filteredApplications = applications.filter(app => {
+  const filteredApplications = applications.filter((app: any) => {
     if (filters.status && app.status !== filters.status) return false;
     if (filters.position && app.position !== filters.position) return false;
     if (filters.search && !app.applicantName.toLowerCase().includes(filters.search.toLowerCase()) && 
@@ -331,7 +331,7 @@ export const ClerkDashboard: React.FC = () => {
           
           {/* Custom Action Buttons for Clerk */}
           <div className="mt-4 space-y-4">
-            {filteredApplications.map(app => (
+            {filteredApplications.map((app: any) => (
               <div key={app.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                 <div>
                   <span className="font-medium">{app.applicantName}</span>

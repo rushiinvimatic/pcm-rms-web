@@ -1,12 +1,12 @@
 export interface Application {
   id: string;
-  applicationNumber: string;
-  applicantName: string;
-  position: string;
-  positionType: number;
-  status: ApplicationStatus;
-  submittedDate: string;
-  lastUpdated: string;
+  applicationNumber?: string;
+  applicantName?: string;
+  position?: string;
+  positionType?: number;
+  status?: ApplicationStatus;
+  submittedDate?: string;
+  lastUpdated?: string;
   assignedOfficer?: string;
   appointmentDate?: string;
   appointmentTime?: string;

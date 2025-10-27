@@ -13,7 +13,7 @@ type TaskStage = 'stage1' | 'stage2';
 export const ChiefEngineerDashboard: React.FC = () => {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
+  const [selectedApplication, setSelectedApplication] = useState<Application | any>(null);
   const [activeTab, setActiveTab] = useState<TaskStage>('stage1');
   const [otpModal, setOtpModal] = useState<OTPVerificationData>({
     isVisible: false,
@@ -248,7 +248,7 @@ export const ChiefEngineerDashboard: React.FC = () => {
     }
   };
 
-  const filteredApplications = getStageApplications(activeTab).filter(app => {
+  const filteredApplications = getStageApplications(activeTab).filter((app: any) => {
     if (filters.status && app.status !== filters.status) return false;
     if (filters.position && app.position !== filters.position) return false;
     if (filters.search && !app.applicantName.toLowerCase().includes(filters.search.toLowerCase()) && 

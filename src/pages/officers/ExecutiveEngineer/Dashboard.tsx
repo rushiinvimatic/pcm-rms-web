@@ -17,9 +17,9 @@ import type { Application, ApplicationStatus, OTPVerificationData } from '../../
 type TaskStage = 'stage1' | 'stage2';
 
 export const ExecutiveEngineerDashboard: React.FC = () => {
-  const [applications, setApplications] = useState<Application[]>([]);
+  const [applications, setApplications] = useState<Application[] | any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
+  const [selectedApplication, setSelectedApplication] = useState<Application | any>(null);
   const [selectedApplicationDetails, setSelectedApplicationDetails] = useState<any>(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<TaskStage>('stage1');
@@ -477,7 +477,7 @@ export const ExecutiveEngineerDashboard: React.FC = () => {
     return matchesSearch && matchesStatus && matchesPosition;
   });
 
-  const getActionButtons = (application: Application) => {
+  const getActionButtons = (application: Application | any) => {
     const buttons = [];
     const currentStage = (application as any).currentStage;
     
@@ -544,7 +544,7 @@ export const ExecutiveEngineerDashboard: React.FC = () => {
         buttons.push(
           <Button
             key="view-certificate"
-            onClick={() => handleViewCertificate(application.certificatePath!, application.applicantName)}
+            onClick={() => handleViewCertificate(application.certificatePath!, application?.applicantName)}
             className="bg-gray-600 hover:bg-gray-700 text-white"
             size="sm"
           >

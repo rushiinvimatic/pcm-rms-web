@@ -228,8 +228,8 @@ export const AssistantEngineerDashboard: React.FC = () => {
     setDetailsLoading(true);
     
     try {
-      const details = await applicationService.getApplicationDetails(application.id);
-      setSelectedApplicationDetails(details);
+      const response = await applicationService.fetchOfficerApplications(undefined, 1, 50);
+      setSelectedApplicationDetails(response);
     } catch (error) {
       console.error('Failed to fetch application details:', error);
       toast({
@@ -541,17 +541,14 @@ export const AssistantEngineerDashboard: React.FC = () => {
             setSelectedApplication(null);
             setSelectedApplicationDetails(null);
           }}
-          applicationData={selectedApplicationDetails}
-          loading={detailsLoading}
+          application={selectedApplicationDetails}
           onViewDocument={handleViewDocument}
-          readOnly={true}
-          title="Application Details - Assistant Engineer Review"
+          onDownloadDocument={handleViewDocument}
         />
       )}
 
       {/* Document Viewer Modal */}
       <DocumentViewer
-        isOpen={documentViewer.isOpen}
         onClose={() => setDocumentViewer({ ...documentViewer, isOpen: false })}
         documentUrl={documentViewer.documentUrl}
         documentName={documentViewer.documentName}
