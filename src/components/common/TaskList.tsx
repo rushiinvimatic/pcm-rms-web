@@ -90,7 +90,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   return (
     <div className={cn("space-y-4", className)}>
       {applications.map((application) => {
-        const daysWaiting = getDaysWaiting(application.submittedDate);
+        const daysWaiting = getDaysWaiting(application.submittedDate || '');
         
         return (
           <div
@@ -117,7 +117,7 @@ export const TaskList: React.FC<TaskListProps> = ({
                   <span className="font-medium">Position:</span> {application.position}
                 </p>
                 <p className="text-sm text-gray-600">
-                  <span className="font-medium">Submitted:</span> {formatDate(application.submittedDate)}
+                  <span className="font-medium">Submitted:</span> {formatDate(application.submittedDate || '')}
                 </p>
                 {isStage2 && application.certificatePath && (
                   <p className="text-sm text-blue-600 mt-1">
@@ -133,9 +133,9 @@ export const TaskList: React.FC<TaskListProps> = ({
               <div className="flex flex-col items-end gap-2">
                 <span className={cn(
                   "text-xs px-2 py-1 rounded-full font-medium",
-                  getStatusColor(application.status)
+                  getStatusColor(application.status || '')
                 )}>
-                  {application.status.replace(/_/g, ' ')}
+                  {application.status?.replace(/_/g, ' ') || 'Unknown Status'}
                 </span>
                 {application.assignedOfficer && (
                   <p className="text-xs text-gray-500">

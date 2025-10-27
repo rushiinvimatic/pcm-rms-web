@@ -27,7 +27,7 @@ export const ProfessionalDetailsStep: React.FC<ProfessionalDetailsStepProps> = (
   };
 
   const handlePositionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onUpdate({ Position: e.target.value });
+    onUpdate({ positionType: parseInt(e.target.value) });
   };
 
   const handleAddQualification = () => {
@@ -65,7 +65,7 @@ export const ProfessionalDetailsStep: React.FC<ProfessionalDetailsStepProps> = (
           id="position"
           name="Position"
           className="w-full px-3 py-2 border border-gray-300 rounded-md"
-          value={data.Position || ''}
+          value={data.positionType?.toString() || ''}
           onChange={handlePositionChange}
           required
         >
@@ -79,9 +79,9 @@ export const ProfessionalDetailsStep: React.FC<ProfessionalDetailsStepProps> = (
       </div>
 
       {/* Show position requirements if position is selected */}
-      {data.Position && (
+      {data.positionType && (
         <PositionRequirements 
-          positionId={parseInt(data.Position)} 
+          positionId={data.positionType || 0} 
           className="mb-6"
         />
       )}

@@ -4,16 +4,26 @@ import { PersonalInfoStep } from './PersonalInfoStep';
 import { ReviewStep } from './ReviewStep';
 import { DocumentUploadStep } from './DocumentUploadStep';
 import { useNavigate, useNavigation } from 'react-router-dom';
-import type { ApplicationFormData } from '../../types/application';
+import type { ApplicationFormData, ApplicationFormInput } from '../../types/application';
 
 type Step = 'personal' | 'professional' | 'documents' | 'review';
 
 export const ApplicationForm: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<Step>('personal');
-  const [formData, setFormData] = useState<Partial<ApplicationFormData>>({});
+  const [formData, setFormData] = useState<Partial<ApplicationFormInput>>({
+    qualifications: [],
+    experiences: [],
+    additionalDocuments: [],
+    sameAsPermanent: false,
+    panCardFile: null,
+    aadharCardFile: null,
+    coaCertificateFile: null,
+    profilePictureFile: null,
+    electricityBillFile: null,
+  });
   const navigate = useNavigate();
 
-  const updateFormData = (data: Partial<ApplicationFormData>) => {
+  const updateFormData = (data: Partial<ApplicationFormInput>) => {
     setFormData(prev => ({ ...prev, ...data }));
   };
 
@@ -123,16 +133,17 @@ export const ApplicationForm: React.FC = () => {
       <div className="bg-white rounded-lg shadow p-6">
         {currentStep === 'personal' && (
           <PersonalInfoStep
-            data={formData}
-            onUpdate={updateFormData}
-            onNext={handleNextStep}
+            values={formData as ApplicationFormInput}
+            errors={{}}
+            touched={{}}
+            setFieldValue={(field, value) => updateFormData({ [field]: value })}
           />
         )}
 
         {currentStep === 'professional' && (
           <ProfessionalDetailsStep
-            data={formData}
-            onUpdate={updateFormData}
+            data={formData as Partial<ApplicationFormData>}
+            onUpdate={(data) => updateFormData(data as Partial<ApplicationFormInput>)}
             onNext={handleNextStep}
             onPrev={handlePrevStep}
           />
@@ -140,18 +151,16 @@ export const ApplicationForm: React.FC = () => {
 
         {currentStep === 'documents' && (
           <DocumentUploadStep
-            data={formData}
-            onUpdate={updateFormData}
-            onNext={handleNextStep}
-            onPrev={handlePrevStep}
+            values={formData as ApplicationFormInput}
+            errors={{}}
+            touched={{}}
+            setFieldValue={(field, value) => updateFormData({ [field]: value })}
           />
         )}
 
         {currentStep === 'review' && (
           <ReviewStep
-            data={formData}
-            onSubmit={handleSubmit}
-            onPrev={handlePrevStep}
+            values={formData as ApplicationFormInput}
           />
         )}
       </div>
