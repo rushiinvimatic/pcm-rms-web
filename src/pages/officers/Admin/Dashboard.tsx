@@ -265,12 +265,16 @@ const AdminDashboard: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="mt-2 text-gray-600">
-            Welcome, {user?.email}. System administration and oversight.
+          <div className="flex items-center mb-4">
+            <div className="h-1 w-12 bg-amber-400 mr-4"></div>
+            <span className="text-slate-600 text-sm font-medium tracking-wider uppercase">System Administration</span>
+          </div>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Administration Dashboard</h1>
+          <p className="text-slate-600 text-lg">
+            Municipal system administration and oversight portal
           </p>
         </div>
 

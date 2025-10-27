@@ -288,11 +288,15 @@ export const UserDashboard: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Welcome, {user?.name || (applications[0] ? `${applications[0].firstName} ${applications[0].lastName}` : 'User')}!
+          <div className="flex items-center mb-4">
+            <div className="h-1 w-12 bg-amber-400 mr-4"></div>
+            <span className="text-slate-600 text-sm font-medium tracking-wider uppercase">Citizen Services</span>
+          </div>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">
+            Welcome, {user?.name || (applications[0] ? `${applications[0].firstName} ${applications[0].lastName}` : 'Citizen')}
           </h1>
-          <p className="text-gray-600 mt-2">
-            Manage your PMC applications and track their status
+          <p className="text-slate-600 text-lg">
+            Manage your municipal applications and track their status through our secure government portal
           </p>
         </div>
 

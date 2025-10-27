@@ -269,8 +269,12 @@ export const AssistantLicenceEngineerDashboard: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Assistant Licence Engineer Dashboard</h1>
-          <p className="text-gray-600">Review & Approve Applications with Digital Signature</p>
+          <div className="flex items-center mb-4">
+            <div className="h-1 w-12 bg-amber-400 mr-4"></div>
+            <span className="text-slate-600 text-sm font-medium tracking-wider uppercase">Application Approval</span>
+          </div>
+          <h1 className="text-2xl font-bold text-slate-900">Approval Dashboard</h1>
+          <p className="text-slate-600">Review and approve applications with digital signatures</p>
         </div>
         <Button 
           onClick={() => fetchPendingApplications()}

@@ -648,8 +648,12 @@ export const JuniorLicenceEngineerDashboard: React.FC = () => {
         {/* Header section */}
         <div className="flex flex-row md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Junior Licence Engineer Dashboard</h1>
-            <p className="text-gray-600">Review Applications & Verify Documents</p>
+            <div className="flex items-center mb-4">
+              <div className="h-1 w-12 bg-amber-400 mr-4"></div>
+              <span className="text-slate-600 text-sm font-medium tracking-wider uppercase">Application Review</span>
+            </div>
+            <h1 className="text-2xl font-bold text-slate-900">Engineering Review Dashboard</h1>
+            <p className="text-slate-600">Review applications and verify technical documentation</p>
           </div>
           <div className="mt-4 md:mt-0 flex space-x-2">
             <Button
