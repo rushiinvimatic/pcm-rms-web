@@ -17,7 +17,7 @@ import {
   getApplicationStatusColor 
 } from '../../utils/enumMappings';
 import { ApplicationStatus } from '../../types/application';
-import { PaymentModal } from '../../components/common/PaymentModal';
+
 
 interface ApiApplication {
   id: string;
@@ -45,9 +45,8 @@ export const UserDashboard: React.FC = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [paymentProcessing, setPaymentProcessing] = useState<Record<string, boolean>>({});
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [paymentModalData, setPaymentModalData] = useState<any>(null);
-  const [paymentViewData, setPaymentViewData] = useState<any>(null);
+
+
   const [challanInfo, setChallanInfo] = useState<Record<string, any>>({});
   const [stats, setStats] = useState({
     total: 0,
@@ -147,38 +146,75 @@ export const UserDashboard: React.FC = () => {
         description: `Processing payment for application ${applicationNumber}...`,
       });
 
-      // Use the complete payment flow that handles both initiate and view APIs
-      const response = await paymentService.processCompletePaymentFlow(applicationId);
+      // Call the payment initiation API directly
+      const response = await paymentService.initiatePayment(applicationId);
       
-      if (response.success && response.paymentData) {
-        // Find application details for payment modal
-        const application = applications?.find(app => app.id === applicationId);
-        const applicantName = application ? 
-          `${application.firstName} ${application.middleName} ${application.lastName}`.trim() : 
-          'Unknown Applicant';
-        const position = application ? getPositionTypeLabel(application.positionType) : 'Unknown Position';
+      if (response.success && response.data) {
+        console.log('Payment initiation successful:', response);
         
-        // Show modal with payment details
-        setPaymentModalData({
-          applicationNumber,
-          applicationId,
-          transactionId: response.paymentData.transactionId,
-          bdOrderId: response.paymentData.bdOrderId,
-          txnEntityId: response.paymentData.txnEntityId,
-          paymentGatewayUrl: response.paymentData.paymentGatewayUrl || response.paymentData.redirectUrl,
-          message: response.paymentData.message,
-          applicantName,
-          position
-        });
+        // Extract payment data from response
+        const paymentData = response.data;
         
-        // Store the view data for form submission
-        setPaymentViewData(response.viewData);
-        setShowPaymentModal(true);
-        
-        toast({
-          title: "Payment Ready",
-          description: "Payment gateway is ready for processing.",
-        });
+        // Validate that we have the required BillDesk payment data
+        if (paymentData.paymentGatewayUrl && paymentData.bdOrderId && paymentData.rData) {
+          console.log('Creating BillDesk payment form...');
+          console.log('Gateway URL:', paymentData.paymentGatewayUrl);
+          console.log('BdOrderId:', paymentData.bdOrderId);
+          console.log('Authorization Header:', paymentData.authorizationHeader);
+          
+          // Create and submit form directly to BillDesk payment gateway
+          const form = document.createElement('form');
+          form.method = 'POST';
+          form.action = paymentData.paymentGatewayUrl;
+          form.style.display = 'none';
+
+          // Add required form fields for BillDesk
+          const fields: Record<string, string> = {
+            mercid: 'UATPMCNTYA',
+            bdorderid: paymentData.bdOrderId,
+            rdata: paymentData.rData
+          };
+
+          // Add form fields
+          Object.keys(fields).forEach(key => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = key;
+            input.value = fields[key];
+            form.appendChild(input);
+          });
+
+          // Append to body and submit immediately
+          document.body.appendChild(form);
+          console.log('Submitting form to BillDesk payment gateway:', form.action);
+          console.log('Form fields:', fields);
+          
+          // Submit the form to redirect to BillDesk
+          form.submit();
+
+          // Clean up form after submission
+          setTimeout(() => {
+            if (document.body.contains(form)) {
+              document.body.removeChild(form);
+            }
+          }, 1000);
+
+          toast({
+            title: "Redirecting to Payment Gateway",
+            description: "Please complete your payment in the new window.",
+          });
+        } else {
+          console.error('Invalid payment response structure. Missing required fields:', {
+            hasPaymentGatewayUrl: !!paymentData?.paymentGatewayUrl,
+            hasBdOrderId: !!paymentData?.bdOrderId,
+            hasRData: !!paymentData?.rData
+          });
+          toast({
+            title: "Payment Failed",
+            description: "Invalid payment response from server. Missing payment gateway data.",
+            variant: "destructive",
+          });
+        }
       } else {
         toast({
           title: "Payment Initiation Failed",
@@ -614,30 +650,7 @@ export const UserDashboard: React.FC = () => {
           </Button>
         </div>
 
-        {/* Payment Modal */}
-        <PaymentModal
-          isOpen={showPaymentModal}
-          onClose={() => {
-            setShowPaymentModal(false);
-            setPaymentModalData(null);
-            setPaymentViewData(null);
-            setPaymentProcessing({});
-          }}
-          paymentData={paymentModalData}
-          viewData={paymentViewData}
-          onProceedToPayment={() => {
-            if (paymentModalData?.paymentGatewayUrl) {
-              window.location.href = paymentModalData.paymentGatewayUrl;
-            }
-          }}
-          onPaymentSuccess={(applicationId: string, applicantName: string, position: string) => {
-            handlePaymentSuccess(applicationId, applicantName, position);
-            setShowPaymentModal(false);
-            setPaymentModalData(null);
-            setPaymentViewData(null);
-            setPaymentProcessing({});
-          }}
-        />
+
     </div>
   );
 };

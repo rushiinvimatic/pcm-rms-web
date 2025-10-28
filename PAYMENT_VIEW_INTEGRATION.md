@@ -59,7 +59,7 @@ Response: {
   txnEntityId: "8ec47dbe-b69f-4a75-9fce-257438e5a9ed",
   bdOrderId: "BD20251017080317",
   rData: "RDATA638962849978099932",
-  paymentGatewayUrl: "https://pay.billdesk.com/web/v1_2/embeddedsdk"
+  paymentGatewayUrl: "https://uat1.billdesk.com/u2/web/v1_2/embeddedsdk"
 }
 ```
 
@@ -67,7 +67,7 @@ Response: {
 ```javascript
 GET /api/Payment/view/{txnEntityId}
 Response: HTML content with form:
-<form action="https://pay.billdesk.com/web/v1_2/embeddedsdk" method="post">
+<form action="https://uat1.billdesk.com/u2/web/v1_2/embeddedsdk" method="post">
   <input name="merchantid" value="PMCBLDGNV2" />
   <input name="bdorderid" value="BD20251024070009" />
   <input name="rdata" value="RDATA638968860094234263" />

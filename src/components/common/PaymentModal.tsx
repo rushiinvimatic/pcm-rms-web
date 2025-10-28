@@ -12,9 +12,10 @@ interface PaymentModalProps {
   paymentData: {
     applicationNumber: string;
     applicationId: string;
-    transactionId: string;
+    transactionId?: string;
     bdOrderId: string;
-    txnEntityId: string;
+    rData?: string;
+    txnEntityId?: string;
     paymentGatewayUrl: string;
     message: string;
     applicantName?: string;
@@ -49,6 +50,37 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
           title: "Redirecting to Payment Gateway",
           description: "Please complete your payment in the new window.",
         });
+        onClose(); // Close modal after redirect
+      } else if (paymentData?.paymentGatewayUrl && paymentData?.bdOrderId && paymentData?.rData) {
+        // Create and submit form manually
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = paymentData.paymentGatewayUrl;
+        form.style.display = 'none';
+        
+        // Add hidden fields for BillDesk
+        const fields = [
+          { name: 'merchantid', value: 'PMCBLDGNV2' },
+          { name: 'bdorderid', value: paymentData.bdOrderId },
+          { name: 'rdata', value: paymentData.rData }
+        ];
+        
+        fields.forEach(field => {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = field.name;
+          input.value = field.value;
+          form.appendChild(input);
+        });
+        
+        document.body.appendChild(form);
+        form.submit();
+        
+        toast({
+          title: "Redirecting to Payment Gateway",
+          description: "Please complete your payment in the new window.",
+        });
+        onClose(); // Close modal after redirect
       } else {
         // Fallback to direct URL redirect
         onProceedToPayment();
@@ -176,35 +208,39 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 </div>
               </div>
 
-              <div className="flex justify-between">
-                <span className="text-gray-600">Transaction ID:</span>
-                <div className="flex items-center space-x-2">
-                  <span className="font-mono text-xs">{paymentData.transactionId}</span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => copyToClipboard(paymentData.transactionId, 'Transaction ID')}
-                    className="h-6 w-6 p-0"
-                  >
-                    <Copy className="h-3 w-3" />
-                  </Button>
+              {paymentData.transactionId && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Transaction ID:</span>
+                  <div className="flex items-center space-x-2">
+                    <span className="font-mono text-xs">{paymentData.transactionId}</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => copyToClipboard(paymentData.transactionId!, 'Transaction ID')}
+                      className="h-6 w-6 p-0"
+                    >
+                      <Copy className="h-3 w-3" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <div className="flex justify-between">
-                <span className="text-gray-600">Transaction Entity:</span>
-                <div className="flex items-center space-x-2">
-                  <span className="font-mono text-xs">{paymentData.txnEntityId.substring(0, 8)}...</span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => copyToClipboard(paymentData.txnEntityId, 'Transaction Entity ID')}
-                    className="h-6 w-6 p-0"
-                  >
-                    <Copy className="h-3 w-3" />
-                  </Button>
+              {paymentData.txnEntityId && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Transaction Entity:</span>
+                  <div className="flex items-center space-x-2">
+                    <span className="font-mono text-xs">{paymentData.txnEntityId.substring(0, 8)}...</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => copyToClipboard(paymentData.txnEntityId!, 'Transaction Entity ID')}
+                      className="h-6 w-6 p-0"
+                    >
+                      <Copy className="h-3 w-3" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 

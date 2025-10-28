@@ -40,7 +40,7 @@ curl -X 'POST' \
   "txnEntityId": "8ec47dbe-b69f-4a75-9fce-257438e5a9ed",
   "bdOrderId": "BD20251017080317",
   "rData": "RDATA638962849978099932",
-  "paymentGatewayUrl": "https://pay.billdesk.com/web/v1_2/embeddedsdk"
+  "paymentGatewayUrl": "https://uat1.billdesk.com/u2/web/v1_2/embeddedsdk"
 }
 ```
 

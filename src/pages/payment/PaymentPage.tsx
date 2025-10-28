@@ -205,47 +205,110 @@ export const PaymentPage: React.FC = () => {
 
     try {
       setIsProcessing(true);
+      console.log('Initiating payment for application:', paymentDetails.applicationId);
 
-      // Initialize payment through API
-      const paymentResponse = await paymentService.initializePayment(paymentDetails.applicationId);
+      // Initialize payment through BillDesk API
+      const paymentResponse = await paymentService.initiatePayment(paymentDetails.applicationId);
+      console.log('Payment response received:', paymentResponse);
 
-      if (paymentResponse.redirectUrl) {
-        // Redirect to actual payment gateway
-        window.location.href = paymentResponse.redirectUrl;
+      // Check if payment initiation was successful
+      if (paymentResponse.success) {
+        // Extract payment data from response
+        const paymentData = paymentResponse.data || paymentResponse;
+        
+        // Validate that we have the required data for form submission
+        if (paymentData && (paymentData.formAction || paymentData.paymentGatewayUrl)) {
+          console.log('Payment data validated, creating form...');
+          // Create and submit form directly to BillDesk
+          createAndSubmitBillDeskForm(paymentResponse);
+        } else {
+          console.error('Invalid payment response structure:', paymentResponse);
+          toast({
+            variant: "destructive",
+            title: "Payment Failed",
+            description: "Invalid payment response from server. Please try again.",
+          });
+          setIsProcessing(false);
+        }
       } else {
-        // For demo purposes, simulate payment completion
-        setTimeout(async () => {
-          try {
-            await applicationService.processPaymentCompletion(paymentDetails.applicationId, 'DEMO_PAYMENT_ID');
-            await applicationService.forwardToClerk(paymentDetails.applicationId);
-            
-            navigate('/payment/success', {
-              state: {
-                applicationId: paymentDetails.applicationId,
-                applicationNumber: paymentDetails.applicationNumber,
-                amount: paymentDetails.amount,
-                transactionId: `TXN_${Date.now()}`,
-                paymentMethod: selectedMethod.name
-              }
-            });
-          } catch (error) {
-            console.error('Error processing payment completion:', error);
-            toast({
-              variant: "destructive",
-              title: "Payment Processing Failed",
-              description: "Payment was initiated but processing failed. Please contact support.",
-            });
-          } finally {
-            setIsProcessing(false);
-          }
-        }, 3000);
+        console.error('Payment initiation failed:', paymentResponse);
+        toast({
+          variant: "destructive",
+          title: "Payment Failed",
+          description: paymentResponse.message || "Failed to initiate payment. Please try again.",
+        });
+        setIsProcessing(false);
       }
     } catch (error) {
       console.error('Error initiating payment:', error);
       toast({
         variant: "destructive",
         title: "Payment Failed",
-        description: "Failed to initiate payment. Please try again.",
+        description: `Failed to initiate payment: ${error}`,
+      });
+      setIsProcessing(false);
+    }
+  };
+
+  const createAndSubmitBillDeskForm = (paymentData: any) => {
+    try {
+      console.log('Creating BillDesk form with data:', paymentData);
+
+      // Extract data from nested structure
+      const data = paymentData.data || paymentData;
+      const formAction = data.formAction || data.paymentGatewayUrl || 'https://uat1.billdesk.com/u2/web/v1_2/embeddedsdk';
+      const formFields: Record<string, string> = {
+        mercid: 'UATPMCNTYA',
+        bdorderid: data.bdOrderId,
+        rdata: data.rData
+      };
+
+      console.log('Form action:', formAction);
+      console.log('Form fields:', formFields);
+
+      // Validate required fields
+      if (!formFields.bdorderid || !formFields.rdata) {
+        throw new Error('Missing required payment fields (bdorderid or rdata)');
+      }
+
+      // Create form element
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = formAction;
+      form.style.display = 'none';
+
+      // Add form fields
+      Object.keys(formFields).forEach(key => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = formFields[key];
+        form.appendChild(input);
+        console.log(`Added form field: ${key} = ${formFields[key]}`);
+      });
+
+      // Append to body and submit
+      document.body.appendChild(form);
+      console.log('Form created and submitting to:', form.action);
+      console.log('Form HTML:', form.outerHTML);
+      
+      // Submit the form immediately
+      form.submit();
+
+      // Clean up after a delay (form might be needed for a moment)
+      setTimeout(() => {
+        if (document.body.contains(form)) {
+          document.body.removeChild(form);
+          console.log('Form cleaned up');
+        }
+      }, 1000);
+
+    } catch (error) {
+      console.error('Error creating BillDesk form:', error);
+      toast({
+        variant: "destructive",
+        title: "Payment Failed",
+        description: `Failed to redirect to payment gateway: ${error}`,
       });
       setIsProcessing(false);
     }

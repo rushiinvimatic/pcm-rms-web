@@ -126,34 +126,45 @@ export const paymentService = {
   /**
    * Initiate payment process
    */
-  initiatePayment: async (entityId: string): Promise<any> => {
+  initiatePayment: async (applicationId: string): Promise<any> => {
     try {
-      const response = await api.post('/Payment/initiate', { entityId });
+      console.log('[PaymentService] Initiating payment for applicationId:', applicationId);
+      const response = await api.post('/Payment/initiate', { applicationId });
       
-      // Actual response structure from BillDesk gateway
+      console.log('[PaymentService] Raw API response:', response);
+      console.log('[PaymentService] Response data:', response.data);
+      
+      // Response structure from backend:
       // {
-      //   "success": true,
+      //   "success": true, 
       //   "message": "Payment initiated successfully",
-      //   "transactionId": "272310576067",
-      //   "txnEntityId": "8ec47dbe-b69f-4a75-9fce-257438e5a9ed",
-      //   "bdOrderId": "BD20251017080317",
-      //   "rData": "RDATA638962849978099932",
-      //   "paymentGatewayUrl": "https://pay.billdesk.com/web/v1_2/embeddedsdk"
+      //   "data": {
+      //     "formAction": "https://uat1.billdesk.com/pgidsk/PGIMerchantPayment",
+      //     "formFields": {
+      //       "merchantid": "UATPMCNTYA",
+      //       "bdorderid": "PMC2510271234",
+      //       "rdata": "JWT_TOKEN"  
+      //     },
+      //     "bdOrderId": "PMC2510271234",
+      //     "rData": "JWT_TOKEN",
+      //     "paymentGatewayUrl": "https://uat1.billdesk.com/pgidsk/PGIMerchantPayment"
+      //   }
       // }
       
-      return {
-        success: response.data?.success || false,
-        redirectUrl: response.data?.paymentGatewayUrl || response.data?.redirectUrl,
-        transactionId: response.data?.transactionId,
-        txnEntityId: response.data?.txnEntityId,
-        bdOrderId: response.data?.bdOrderId,
-        rData: response.data?.rData,
-        paymentGatewayUrl: response.data?.paymentGatewayUrl,
-        message: response.data?.message || 'Payment initiated',
-        ...response.data
-      };
+      if (response.data?.success) {
+        console.log('[PaymentService] Payment initiation successful');
+        return response.data; // Return the full response structure
+      } else {
+        console.error('[PaymentService] Payment initiation failed:', response.data);
+        return {
+          success: false,
+          message: response.data?.message || 'Payment initiation failed',
+          error: response.data?.error
+        };
+      }
     } catch (error: any) {
-      console.error('Error initiating payment:', error);
+      console.error('[PaymentService] Error initiating payment:', error);
+      console.error('[PaymentService] Error response data:', error?.response?.data);
       
       // Return structured error response
       return {
@@ -169,7 +180,7 @@ export const paymentService = {
    */
   initializePayment: async (applicationId: string): Promise<any> => {
     try {
-      const response = await api.post('/Payment/initialize', { applicationId });
+      const response = await api.post('/Payment/initiate', { applicationId });
       return response.data;
     } catch (error) {
       console.error('Error initializing payment:', error);
@@ -180,11 +191,11 @@ export const paymentService = {
   /**
    * View payment gateway form (returns HTML content for payment redirection)
    */
-  getPaymentView: async (txnEntityId: string): Promise<PaymentViewResponse> => {
+  getPaymentView: async (applicationId: string): Promise<PaymentViewResponse> => {
     try {
-      console.log('Fetching payment view for txnEntityId:', txnEntityId);
+      console.log('Fetching payment view for applicationId:', applicationId);
       
-      const response = await api.get(`/Payment/view/${txnEntityId}`, {
+      const response = await api.get(`/Payment/View/${applicationId}`, {
         headers: {
           'Accept': '*/*',
           'Content-Type': 'text/html'
@@ -501,8 +512,7 @@ export const paymentService = {
   /**
    * Process complete payment flow: initiate -> view -> redirect
    */
-  
-  processCompletePaymentFlow: async (entityId: string): Promise<{
+  processCompletePaymentFlow: async (applicationId: string): Promise<{
     success: boolean;
     message: string;
     paymentData?: any;
@@ -510,8 +520,8 @@ export const paymentService = {
   }> => {
     try {
       // Step 1: Initiate payment
-      console.log('Step 1: Initiating payment for entity:', entityId);
-      const initiateResponse = await paymentService.initiatePayment(entityId);
+      console.log('Step 1: Initiating payment for application:', applicationId);
+      const initiateResponse = await paymentService.initiatePayment(applicationId);
       
       if (!initiateResponse.success) {
         return {
@@ -521,8 +531,8 @@ export const paymentService = {
       }
       
       // Step 2: Get payment view with form data
-      console.log('Step 2: Getting payment view for transaction:', initiateResponse.txnEntityId);
-      const viewResponse = await paymentService.getPaymentView(entityId);
+      console.log('Step 2: Getting payment view for application:', applicationId);
+      const viewResponse = await paymentService.getPaymentView(applicationId);
       
       return {
         success: true,
