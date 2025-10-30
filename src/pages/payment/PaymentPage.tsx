@@ -21,12 +21,15 @@ import { Label } from '../../components/ui/label';
 import { useToast } from '../../hooks/use-toast';
 import { paymentService, type PaymentStatus, type ChallanStatus } from '../../services/payment.service';
 import { applicationService } from '../../services/application.service';
+import { getRegistrationFee } from '../../constants/registrationFees';
+import { POSITION_LABELS } from '../../types/application';
 
 interface PaymentDetails {
   applicationId: string;
   applicationNumber: string;
   applicantName: string;
   position: string;
+  positionType: number;
   amount: number;
   description: string;
   dueDate: string;
@@ -103,21 +106,29 @@ export const PaymentPage: React.FC = () => {
     try {
       setIsLoading(true);
       
-      // Mock API call - replace with actual API
-      // const response = await dashboardService.getPaymentDetails(applicationId!);
+      // Fetch actual application data from backend
+      const applicationData = await applicationService.getApplicationById(applicationId!);
       
-      // Mock data for demonstration
-      const mockData: PaymentDetails = {
+      // Calculate fee based on position type
+      const registrationFee = getRegistrationFee(applicationData.positionType);
+      const positionLabel = POSITION_LABELS[applicationData.positionType as keyof typeof POSITION_LABELS] || 'Unknown Position';
+      
+      const paymentData: PaymentDetails = {
         applicationId: applicationId!,
-        applicationNumber: 'PMC_APPLICATION_2025_87',
-        applicantName: 'John Doe',
-        position: 'Architect',
-        amount: 5000,
-        description: 'Application processing and certificate issuance fee',
-        dueDate: '2025-03-01'
+        applicationNumber: applicationData.applicationNumber || 'N/A',
+        applicantName: `${applicationData.firstName} ${applicationData.middleName || ''} ${applicationData.lastName}`.trim(),
+        position: positionLabel,
+        positionType: applicationData.positionType,
+        amount: registrationFee,
+        description: registrationFee > 0 
+          ? `Registration fee for ${positionLabel} (3 years validity)` 
+          : 'No registration fee required for Architect position',
+        dueDate: applicationData.submittedDate 
+          ? new Date(new Date(applicationData.submittedDate).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString()
+          : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
       };
 
-      setPaymentDetails(mockData);
+      setPaymentDetails(paymentData);
       
     } catch (error) {
       console.error('Error fetching payment details:', error);
@@ -157,7 +168,8 @@ export const PaymentPage: React.FC = () => {
       await paymentService.generateChallanForApplication(
         paymentDetails.applicationId,
         paymentDetails.applicantName,
-        paymentDetails.position
+        paymentDetails.position,
+        paymentDetails.positionType
       );
       
       toast({
@@ -202,6 +214,17 @@ export const PaymentPage: React.FC = () => {
 
   const initiatePayment = async () => {
     if (!paymentDetails || !selectedMethod || !agreementAccepted) return;
+
+    // Check if payment is required
+    if (paymentDetails.amount === 0) {
+      toast({
+        title: "No Payment Required",
+        description: "Architect position does not require any registration fee. Your application will proceed automatically.",
+      });
+      // Optionally redirect back to dashboard or show completion message
+      setTimeout(() => navigate('/user/dashboard'), 2000);
+      return;
+    }
 
     try {
       setIsProcessing(true);
@@ -610,7 +633,9 @@ export const PaymentPage: React.FC = () => {
                   ) : (
                     <div className="flex items-center justify-center">
                       <CreditCard className="w-4 h-4 mr-2" />
-                      Pay ₹{paymentDetails.amount.toLocaleString()}
+                      {paymentDetails.amount === 0 
+                        ? 'Continue (No Payment Required)' 
+                        : `Pay ₹${paymentDetails.amount.toLocaleString()}`}
                     </div>
                   )}
                 </Button>

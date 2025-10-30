@@ -9,6 +9,8 @@ import {
   type ApplicationFormInput 
 } from '../../types/application';
 import { PositionRequirements } from './PositionRequirements';
+import { getRegistrationFee, getRegistrationFeeDescription } from '../../constants/registrationFees';
+import { IndianRupee } from 'lucide-react';
 
 interface PersonalInfoStepProps {
   values: ApplicationFormInput;
@@ -77,12 +79,32 @@ export const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
       </div>
 
       {values.positionType && (
-        <div className="mt-6">
-          <PositionRequirements 
-            positionId={parseInt(values.positionType)} 
-            className="bg-blue-50 p-4 rounded-lg"
-          />
-        </div>
+        <>
+          <div className="mt-6">
+            <PositionRequirements 
+              positionId={parseInt(values.positionType)} 
+              className="bg-blue-50 p-4 rounded-lg"
+            />
+          </div>
+          
+          {/* Registration Fee Display */}
+          <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+            <div className="flex items-center space-x-2">
+              <IndianRupee className="w-5 h-5 text-green-600" />
+              <h4 className="text-sm font-semibold text-green-800">Registration Fee</h4>
+            </div>
+            <div className="mt-2">
+              <p className="text-lg font-bold text-green-900">
+                {getRegistrationFeeDescription(parseInt(values.positionType))}
+              </p>
+              {getRegistrationFee(parseInt(values.positionType)) > 0 && (
+                <p className="text-xs text-green-700 mt-1">
+                  This fee will be charged during the payment stage after your application is approved.
+                </p>
+              )}
+            </div>
+          </div>
+        </>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

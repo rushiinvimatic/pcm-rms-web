@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { getRegistrationFee } from '../constants/registrationFees';
+import { POSITION_LABELS } from '../types/application';
 
 const API_URL = import.meta.env.DEV 
   ? '/api' 
@@ -334,14 +336,14 @@ export const paymentService = {
   /**
    * Generate challan with auto-calculated details
    */
-  generateChallanForApplication: async (applicationId: string, applicantName: string, position: string): Promise<any> => {
+  generateChallanForApplication: async (applicationId: string, applicantName: string, position: string, positionType: number): Promise<any> => {
     try {
       // Generate challan number with timestamp
       const now = new Date();
       const challanNumber = `CHN-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}-${Date.now().toString().slice(-6)}`;
       
-      // Calculate amount based on position
-      const amount = paymentService.calculateFee(position);
+      // Calculate amount based on position type using the centralized fee configuration
+      const amount = getRegistrationFee(positionType);
       const amountInWords = paymentService.convertAmountToWords(amount);
 
       const challanRequest: ChallanGenerateRequest = {
@@ -362,19 +364,11 @@ export const paymentService = {
   },
 
   /**
-   * Calculate fee based on position
+   * Calculate fee based on position type
+   * @deprecated Use getRegistrationFee from registrationFees.ts instead
    */
-  calculateFee: (position: string): number => {
-    const feeStructure: { [key: string]: number } = {
-      'Architect': 5000,
-      'Structural Engineer': 4500,
-      'Civil Engineer': 4000,
-      'Electrical Engineer': 4000,
-      'Mechanical Engineer': 4000,
-      'default': 5000
-    };
-
-    return feeStructure[position] || feeStructure.default;
+  calculateFee: (positionType: number): number => {
+    return getRegistrationFee(positionType);
   },
 
   /**
@@ -596,7 +590,7 @@ export const paymentService = {
    * Process payment completion and trigger challan & certificate generation
    * This is called after successful payment to trigger Stage 2 workflow
    */
-  processPaymentCompletionStage2: async (applicationId: string, applicantName: string, position: string): Promise<{
+  processPaymentCompletionStage2: async (applicationId: string, applicantName: string, position: string, positionType: number): Promise<{
     challan: any;
     certificate: any;
     success: boolean;
@@ -612,10 +606,13 @@ export const paymentService = {
       // Import certificate service dynamically to avoid circular imports
       const { certificateService } = await import('./certificate.service');
 
+      // Calculate amount based on position type
+      const amount = getRegistrationFee(positionType);
+
       // Run challan and certificate generation simultaneously
       const [challanResponse, certificateResponse] = await Promise.allSettled([
         // Generate challan for user
-        paymentService.generateChallanForApplication(applicationId, applicantName, position),
+        paymentService.generateChallanForApplication(applicationId, applicantName, position, positionType),
         
         // Generate certificate for officers
         certificateService.generateSECertificate({
@@ -623,7 +620,7 @@ export const paymentService = {
           isPayment: true,
           transactionDate: new Date().toISOString(),
           challanNumber: `CHN-${Date.now().toString().slice(-6)}`,
-          amount: paymentService.calculateFee(position)
+          amount
         })
       ]);
 

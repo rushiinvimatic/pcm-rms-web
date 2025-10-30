@@ -93,7 +93,7 @@ export const UserDashboard: React.FC = () => {
     }
   };
 
-  const handlePaymentSuccess = async (applicationId: string, applicantName: string, position: string) => {
+  const handlePaymentSuccess = async (applicationId: string, applicantName: string, position: string, positionType: number) => {
     try {
       toast({
         title: "Payment Successful",
@@ -104,7 +104,8 @@ export const UserDashboard: React.FC = () => {
       const result = await paymentService.processPaymentCompletionStage2(
         applicationId,
         applicantName,
-        position
+        position,
+        positionType
       );
 
       if (result.success) {
