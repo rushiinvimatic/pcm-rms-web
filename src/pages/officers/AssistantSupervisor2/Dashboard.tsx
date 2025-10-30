@@ -4,7 +4,6 @@ import { OTPModal } from '../../../components/common/OTPModal';
 import { useToast } from '../../../hooks/use-toast';
 import { useLoading } from '../../../hooks/useLoading';
 import { applicationService } from '../../../services/application.service';
-import { handleGlobalUpdateStageForTesting, STAGE_MAPPINGS } from '../../../utils/testingUtils';
 import type { Application, OTPVerificationData } from '../../../types/dashboard';
 
 const AssistantSupervisor2Dashboard: React.FC = () => {
@@ -65,25 +64,6 @@ const AssistantSupervisor2Dashboard: React.FC = () => {
     });
   };
 
-  // TEMPORARY TESTING FUNCTION - Update stage bypass with digital signature (TODO: Remove after testing)
-  const handleUpdateStageForTesting = async (applicationId: string) => {
-    const stageMapping = STAGE_MAPPINGS.ASSISTANT_ENGINEER;
-    
-    await callApi(async () => {
-      await handleGlobalUpdateStageForTesting({
-        applicationId,
-        currentStage: stageMapping.currentStage,
-        nextStage: stageMapping.nextStage,
-        nextStageName: stageMapping.nextStageName,
-        comments: 'Testing bypass - Assistant Supervisor 2 approved, moved to Executive Engineer (with digital signature)',
-        onSuccess: async () => {
-          await fetchApplications();
-        },
-        showToast: toast
-      });
-    }, 'Updating stage with digital signature (testing)...');
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -112,22 +92,9 @@ const AssistantSupervisor2Dashboard: React.FC = () => {
                       <p className="text-sm text-gray-600">{application.applicantName}</p>
                       <p className="text-sm text-gray-500">{application.position}</p>
                     </div>
-                    <div className="flex flex-col items-center space-y-2">
-                      <div className="flex items-center space-x-2">
-                        <Button variant="outline" size="sm">View Details</Button>
-                        <Button onClick={() => handleApprove(application.id)} className="bg-green-600 hover:bg-green-700 text-white" size="sm">Approve</Button>
-                      </div>
-                      
-                      {/* TEMPORARY TESTING BUTTON - TODO: Remove after testing */}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100"
-                        onClick={() => handleUpdateStageForTesting(application.id)}
-                        title="⚠️ TESTING ONLY: Bypass OTP and move to next stage"
-                      >
-                        🧪 Update Stage (Test)
-                      </Button>
+                    <div className="flex items-center space-x-2">
+                      <Button variant="outline" size="sm">View Details</Button>
+                      <Button onClick={() => handleApprove(application.id)} className="bg-green-600 hover:bg-green-700 text-white" size="sm">Approve</Button>
                     </div>
                   </div>
                 </div>

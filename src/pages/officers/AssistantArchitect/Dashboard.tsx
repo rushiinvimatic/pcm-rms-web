@@ -20,7 +20,6 @@ import {
 } from 'lucide-react';
 import { appointmentService } from '../../../services/appointment.service';
 import { applicationService } from '../../../services/application.service';
-import { handleGlobalUpdateStageForTesting, STAGE_MAPPINGS } from '../../../utils/testingUtils';
 import { 
   getPositionTypeLabel, 
   getApplicationStatusLabel, 
@@ -290,25 +289,6 @@ export const AssistantArchitectDashboard: React.FC = () => {
     });
   };
 
-  // TEMPORARY TESTING FUNCTION - Update stage bypass with digital signature (TODO: Remove after testing)
-  const handleUpdateStageForTesting = async (applicationId: string) => {
-    const stageMapping = STAGE_MAPPINGS.ASSISTANT_ENGINEER;
-    
-    await callApi(async () => {
-      await handleGlobalUpdateStageForTesting({
-        applicationId,
-        currentStage: stageMapping.currentStage,
-        nextStage: stageMapping.nextStage,
-        nextStageName: stageMapping.nextStageName,
-        comments: 'Testing bypass - Assistant Architect approved, moved to Executive Engineer (with digital signature)',
-        onSuccess: async () => {
-          await fetchPendingApplications();
-        },
-        showToast: toast
-      });
-    }, 'Updating stage with digital signature (testing)...');
-  };
-
   const getStatusDisplay = (status: number) => {
     return (
       <Badge
@@ -503,17 +483,6 @@ export const AssistantArchitectDashboard: React.FC = () => {
                               Reject
                             </Button>
                           </div>
-                          
-                          {/* TEMPORARY TESTING BUTTON - TODO: Remove after testing */}
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100"
-                            onClick={() => handleUpdateStageForTesting(application.id)}
-                            title="⚠️ TESTING ONLY: Bypass OTP and move to next stage"
-                          >
-                            🧪 Update Stage (Test)
-                          </Button>
                         </div>
                       </td>
                     </tr>

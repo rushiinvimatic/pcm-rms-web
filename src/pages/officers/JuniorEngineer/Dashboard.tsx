@@ -1,11 +1,3 @@
-/**
- * TEMPORARY TESTING CHANGES - TODO: Remove after testing
- * - Added updateStageForTesting API function in application.service.ts
- * - Added handleUpdateStageForTesting function 
- * - Added "🧪 Update Stage (Test)" button in document verification cards
- * These changes bypass OTP verification for testing purposes only
- */
-
 import {
   Building,
   Calendar,
@@ -28,7 +20,6 @@ import { Label } from '../../../components/ui/label';
 import { useToast } from '../../../hooks/use-toast';
 import { useLoading } from '../../../hooks/useLoading';
 import { applicationService } from '../../../services/application.service';
-import { handleGlobalUpdateStageForTesting, STAGE_MAPPINGS } from '../../../utils/testingUtils';
 import { appointmentService, type ScheduleAppointmentRequest } from '../../../services/appointment.service';
 import { fileService } from '../../../services/file.service';
 import { ApplicationStage } from '../../../types/application';
@@ -587,26 +578,6 @@ export const JuniorEngineerDashboard: React.FC = () => {
     }
   };
 
-  // TEMPORARY TESTING FUNCTION - Update stage bypass with digital signature (TODO: Remove after testing)
-  const handleUpdateStageForTesting = async (applicationId: string) => {
-    const stageMapping = STAGE_MAPPINGS.JUNIOR_ENGINEER;
-    
-    await callApi(async () => {
-      await handleGlobalUpdateStageForTesting({
-        applicationId,
-        currentStage: stageMapping.currentStage,
-        nextStage: stageMapping.nextStage,
-        nextStageName: stageMapping.nextStageName,
-        comments: 'Testing bypass - Document verification approved, moved to Assistant Engineer (with digital signature)',
-        onSuccess: async () => {
-          await fetchPendingApplications();
-          await fetchScheduledApplications();
-        },
-        showToast: toast
-      });
-    }, 'Updating stage with digital signature (testing)...');
-  };
-
   // Helper functions
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -937,16 +908,6 @@ export const JuniorEngineerDashboard: React.FC = () => {
                       >
                         <CheckCircle className="h-4 w-4 mr-2" />
                         Approve
-                      </Button>
-                      
-                      {/* TEMPORARY TESTING BUTTON - TODO: Remove after testing */}
-                      <Button
-                        variant="outline"
-                        className="flex-1 md:w-full bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100"
-                        onClick={() => handleUpdateStageForTesting(application.id)}
-                        title="⚠️ TESTING ONLY: Bypass OTP and move to next stage"
-                      >
-                        🧪 Update Stage (Test)
                       </Button>
                       
                       <Button

@@ -1,10 +1,3 @@
-/**
- * TEMPORARY TESTING CHANGES - TODO: Remove after testing
- * - Added handleUpdateStageForTesting function 
- * - Added "🧪 Update Stage (Test)" button in application cards
- * These changes bypass OTP verification for testing purposes only
- */
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
@@ -27,7 +20,6 @@ import {
 } from 'lucide-react';
 import { appointmentService } from '../../../services/appointment.service';
 import { applicationService } from '../../../services/application.service';
-import { handleGlobalUpdateStageForTesting, STAGE_MAPPINGS } from '../../../utils/testingUtils';
 import { 
   getPositionTypeLabel, 
   getApplicationStatusLabel, 
@@ -253,25 +245,6 @@ export const AssistantEngineerDashboard: React.FC = () => {
       documentName,
       documentType
     });
-  };
-
-  // TEMPORARY TESTING FUNCTION - Update stage bypass with digital signature (TODO: Remove after testing)
-  const handleUpdateStageForTesting = async (applicationId: string) => {
-    const stageMapping = STAGE_MAPPINGS.ASSISTANT_ENGINEER;
-    
-    await callApi(async () => {
-      await handleGlobalUpdateStageForTesting({
-        applicationId,
-        currentStage: stageMapping.currentStage,
-        nextStage: stageMapping.nextStage,
-        nextStageName: stageMapping.nextStageName,
-        comments: 'Testing bypass - Assistant Engineer approved, moved to Executive Engineer (with digital signature)',
-        onSuccess: async () => {
-          await fetchPendingApplications();
-        },
-        showToast: toast
-      });
-    }, 'Updating stage with digital signature (testing)...');
   };
 
   // Helper functions
@@ -503,17 +476,6 @@ export const AssistantEngineerDashboard: React.FC = () => {
                     >
                       <CheckCircle className="h-4 w-4 mr-2" />
                       Approve & Sign
-                    </Button>
-                    
-                    {/* TEMPORARY TESTING BUTTON - TODO: Remove after testing */}
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100 min-w-[140px]"
-                      onClick={() => handleUpdateStageForTesting(application.id)}
-                      title="⚠️ TESTING ONLY: Bypass OTP and move to next stage"
-                    >
-                      🧪 Update Stage (Test)
                     </Button>
                     
                     <Button

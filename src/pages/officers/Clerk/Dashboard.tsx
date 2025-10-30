@@ -9,7 +9,6 @@ import { useToast } from '../../../hooks/use-toast';
 import { useLoading } from '../../../hooks/useLoading';
 import { appointmentService } from '../../../services/appointment.service';
 import { applicationService } from '../../../services/application.service';
-import { handleGlobalUpdateStageForTesting, STAGE_MAPPINGS } from '../../../utils/testingUtils';
 import { ApplicationStage } from '../../../types/application';
 import type { Application, OTPVerificationData } from '../../../types/dashboard';
 
@@ -206,25 +205,6 @@ export const ClerkDashboard: React.FC = () => {
     }
   };
 
-  // TEMPORARY TESTING FUNCTION - Update stage bypass with digital signature (TODO: Remove after testing)
-  const handleUpdateStageForTesting = async (applicationId: string) => {
-    const stageMapping = STAGE_MAPPINGS.CLERK;
-    
-    await callApi(async () => {
-      await handleGlobalUpdateStageForTesting({
-        applicationId,
-        currentStage: stageMapping.currentStage,
-        nextStage: stageMapping.nextStage,
-        nextStageName: stageMapping.nextStageName,
-        comments: 'Testing bypass - Clerk processed application, certificate number generated (with digital signature)',
-        onSuccess: async () => {
-          await fetchApplications();
-        },
-        showToast: toast
-      });
-    }, 'Updating stage with digital signature (testing)...');
-  };
-
   const filteredApplications = applications.filter((app: any) => {
     if (filters.status && app.status !== filters.status) return false;
     if (filters.position && app.position !== filters.position) return false;
@@ -365,33 +345,6 @@ export const ClerkDashboard: React.FC = () => {
                 </div>
               </div>
             ))}
-            
-            {/* TEMPORARY TESTING SECTION - TODO: Remove after testing */}
-            {filteredApplications.length > 0 && (
-              <div className="mt-4 p-4 bg-orange-50 border border-orange-200 rounded-lg">
-                <h3 className="text-sm font-semibold text-orange-800 mb-2">🧪 Testing Controls</h3>
-                <p className="text-xs text-orange-600 mb-3">⚠️ TESTING ONLY: Use these buttons to bypass OTP verification and move applications to the next stage</p>
-                <div className="space-y-2">
-                  {filteredApplications.map((application) => (
-                    <div key={application.id} className="flex items-center justify-between bg-white p-2 rounded border">
-                      <div className="text-sm">
-                        <span className="font-medium">{application.applicationNumber}</span>
-                        <span className="text-gray-500 ml-2">- {application.applicantName}</span>
-                      </div>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100"
-                        onClick={() => handleUpdateStageForTesting(application.id)}
-                        title="⚠️ TESTING ONLY: Bypass OTP and move to next stage"
-                      >
-                        🧪 Update Stage (Test)
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>

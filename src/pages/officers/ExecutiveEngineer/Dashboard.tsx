@@ -9,7 +9,6 @@ import { useLoading } from '../../../hooks/useLoading';
 import { appointmentService } from '../../../services/appointment.service';
 import { applicationService } from '../../../services/application.service';
 import { fileService } from '../../../services/file.service';
-import { handleGlobalUpdateStageForTesting, STAGE_MAPPINGS } from '../../../utils/testingUtils';
 import { ApplicationStage, DocumentType } from '../../../types/application';
 import { DocumentViewer } from '../../../components/common/DocumentViewer/DocumentViewer';
 import type { Application, ApplicationStatus, OTPVerificationData } from '../../../types/dashboard';
@@ -286,34 +285,6 @@ export const ExecutiveEngineerDashboard: React.FC = () => {
     fetchApplicationDetails(application.id);
   };
 
-  // TEMPORARY TESTING FUNCTION - Update stage bypass with digital signature (TODO: Remove after testing)
-  const handleUpdateStageForTesting = async (applicationId: string) => {
-    // Find the application to determine which stage mapping to use
-    const application = applications.find(app => app.id === applicationId);
-    const currentStage = (application as any)?.currentStage;
-    
-    // Use different stage mappings based on current stage
-    const stageMapping = STAGE_MAPPINGS.EXECUTIVE_ENGINEER_STAGE2       // Stage 1: from 3 to 4
-    
-    const comments = currentStage === 7
-      ? 'Testing bypass - Executive Engineer final signature applied, moved to City Engineer final signature'
-      : 'Testing bypass - Executive Engineer approved, moved to City Engineer (with digital signature)';
-    
-    await callApi(async () => {
-      await handleGlobalUpdateStageForTesting({
-        applicationId,
-        currentStage: stageMapping.currentStage,
-        nextStage: stageMapping.nextStage,
-        nextStageName: stageMapping.nextStageName,
-        comments,
-        onSuccess: async () => {
-          await fetchApplications();
-        },
-        showToast: toast
-      });
-    }, 'Updating stage with digital signature (testing)...');
-  };
-
   // Helper function to get document type label
   const getDocumentTypeLabel = (documentType: number): string => {
     const types = {
@@ -513,19 +484,6 @@ export const ExecutiveEngineerDashboard: React.FC = () => {
           Reject
         </Button>
       );
-      // TEMPORARY TESTING BUTTON - TODO: Remove after testing
-      buttons.push(
-        <Button
-          key="test"
-          onClick={() => handleUpdateStageForTesting(application.id)}
-          variant="outline"
-          className="bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100"
-          size="sm"
-          title="⚠️ TESTING ONLY: Bypass OTP and move to next stage"
-        >
-          🧪 Update Stage (Test)
-        </Button>
-      );
     } else if (activeTab === 'stage2' && currentStage === 7) {
       // Stage 2: Applications at currentStage 7 have certificates ready for final signature
       buttons.push(
@@ -552,19 +510,6 @@ export const ExecutiveEngineerDashboard: React.FC = () => {
           </Button>
         );
       }
-      // TEMPORARY TESTING BUTTON - TODO: Remove after testing
-      buttons.push(
-        <Button
-          key="test"
-          onClick={() => handleUpdateStageForTesting(application.id)}
-          variant="outline"
-          className="bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100"
-          size="sm"
-          title="⚠️ TESTING ONLY: Bypass OTP and move to next stage"
-        >
-          🧪 Update Stage (Test)
-        </Button>
-      );
     }
     
     return buttons;

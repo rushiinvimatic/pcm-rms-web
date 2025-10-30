@@ -1,10 +1,3 @@
-/**
- * TEMPORARY TESTING CHANGES - TODO: Remove after testing
- * - Added handleUpdateStageForTesting function 
- * - Added "🧪 Update Stage (Test)" button in document verification cards
- * These changes bypass OTP verification for testing purposes only
- */
-
 import {
   Building,
   Calendar,
@@ -28,7 +21,6 @@ import { useToast } from '../../../hooks/use-toast';
 import { useLoading } from '../../../hooks/useLoading';
 import { applicationService } from '../../../services/application.service';
 import { appointmentService, type ScheduleAppointmentRequest } from '../../../services/appointment.service';
-import { handleGlobalUpdateStageForTesting, STAGE_MAPPINGS } from '../../../utils/testingUtils';
 import { fileService } from '../../../services/file.service';
 import { ApplicationStage } from '../../../types/application';
 import {
@@ -565,26 +557,6 @@ export const JuniorStructuralEngineerDashboard: React.FC = () => {
     }
   };
 
-  // TEMPORARY TESTING FUNCTION - Update stage bypass with digital signature (TODO: Remove after testing)
-  const handleUpdateStageForTesting = async (applicationId: string) => {
-    const stageMapping = STAGE_MAPPINGS.JUNIOR_STRUCTURAL_ENGINEER;
-    
-    await callApi(async () => {
-      await handleGlobalUpdateStageForTesting({
-        applicationId,
-        currentStage: stageMapping.currentStage,
-        nextStage: stageMapping.nextStage,
-        nextStageName: stageMapping.nextStageName,
-        comments: 'Testing bypass - Document verification approved, moved to Executive Engineer (with digital signature)',
-        onSuccess: async () => {
-          await fetchPendingApplications();
-          await fetchScheduledApplications();
-        },
-        showToast: toast
-      });
-    }, 'Updating stage with digital signature (testing)...');
-  };
-
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-IN', {
@@ -908,16 +880,6 @@ export const JuniorStructuralEngineerDashboard: React.FC = () => {
                         >
                           <CheckCircle className="h-4 w-4 mr-2" />
                           Approve
-                        </Button>
-                        
-                        {/* TEMPORARY TESTING BUTTON - TODO: Remove after testing */}
-                        <Button
-                          variant="outline"
-                          className="flex-1 md:w-full bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100"
-                          onClick={() => handleUpdateStageForTesting(application.id)}
-                          title="⚠️ TESTING ONLY: Bypass OTP and move to next stage"
-                        >
-                          🧪 Update Stage (Test)
                         </Button>
                         
                         <Button
