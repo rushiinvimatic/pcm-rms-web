@@ -1,6 +1,6 @@
 # Payment Integration with BillDesk Gateway
 
-This document outlines the complete payment integration implementation for the PMC (Pimpri-Chinchwad Municipal Corporation) application system.
+This document outlines the complete payment integration implementation for the PMC (Pune Municipal Corporation) application system.
 
 ## Overview
 

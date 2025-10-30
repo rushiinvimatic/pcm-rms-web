@@ -64,7 +64,7 @@ export const PaymentSuccessPage: React.FC = () => {
       
       // Create a mock receipt
       const receiptContent = `
-PIMPRI-CHINCHWAD MUNICIPAL CORPORATION
+PUNE MUNICIPAL CORPORATION
 Payment Receipt
 
 Application Number: ${paymentData.applicationNumber}

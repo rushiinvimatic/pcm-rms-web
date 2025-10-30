@@ -68,12 +68,12 @@ export const LandingPage: React.FC = () => {
           
           <div className="container mx-auto px-4 flex flex-col md:flex-row items-center relative z-10">
             <div className="md:w-1/2 mb-10 md:mb-0 animate-fadeIn">
-              <div className="mb-6 flex items-center">
+              <div className="flex items-center mb-4">
                 <div className="h-1 w-16 bg-amber-400 mr-4"></div>
                 <span className="text-amber-300 text-sm font-semibold tracking-widest uppercase">Government of Maharashtra</span>
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                <span className="text-amber-300">Pimpri-Chinchwad</span><br/>
+                <span className="text-amber-300">Pune</span><br/>
                 <span className="text-white">Municipal Corporation</span><br/>
                 <span className="text-blue-200 text-3xl md:text-4xl lg:text-5xl">Registration Management System</span>
               </h1>
@@ -131,7 +131,7 @@ export const LandingPage: React.FC = () => {
                 </div>
                 <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Government Services</h2>
                 <p className="text-slate-600 text-lg max-w-3xl mx-auto leading-relaxed">
-                  Pimpri-Chinchwad Municipal Corporation provides comprehensive digital services designed to serve citizens with transparency, efficiency, and accountability.
+                  Pune Municipal Corporation provides comprehensive digital services designed to serve citizens with transparency, efficiency, and accountability.
                 </p>
               </div>
               
@@ -317,13 +317,13 @@ export const LandingPage: React.FC = () => {
                   <PMCLogo size="medium" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-xl text-white">PCMC Registration Portal</h3>
-                  <p className="text-sm text-amber-400 font-medium">Pimpri-Chinchwad Municipal Corporation</p>
+                  <h3 className="font-bold text-xl text-white">PMC Registration Portal</h3>
+                  <p className="text-sm text-amber-400 font-medium">Pune Municipal Corporation</p>
                   <p className="text-xs text-slate-400 mt-1">Government of Maharashtra</p>
                 </div>
               </div>
               <p className="text-slate-300 text-sm max-w-md leading-relaxed mb-4">
-                Official digital platform for Pimpri-Chinchwad Municipal Corporation registration services. 
+                Official digital platform for Pune Municipal Corporation registration services. 
                 Committed to transparency, efficiency, and citizen-centric governance.
               </p>
               <div className="flex items-center space-x-4 text-xs text-slate-400">
@@ -370,7 +370,7 @@ export const LandingPage: React.FC = () => {
                   </svg>
                   <div>
                     <p className="text-slate-300 text-sm font-medium">Municipal Corporation Office</p>
-                    <p className="text-slate-400 text-sm">Pimpri-Chinchwad, Pune<br/>Maharashtra 411018</p>
+                    <p className="text-slate-400 text-sm">Pune, Maharashtra<br/>Maharashtra 411001</p>
                   </div>
                 </li>
                 <li className="flex items-center">
@@ -378,7 +378,7 @@ export const LandingPage: React.FC = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   <div>
-                    <p className="text-slate-300 text-sm font-medium">support@pcmc.gov.in</p>
+                    <p className="text-slate-300 text-sm font-medium">support@pmc.gov.in</p>
                   </div>
                 </li>
                 <li className="flex items-center">
@@ -396,7 +396,7 @@ export const LandingPage: React.FC = () => {
           <div className="border-t border-slate-800 mt-8 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
               <div className="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-8">
-                <p className="text-sm text-slate-400">© {new Date().getFullYear()} Pimpri-Chinchwad Municipal Corporation. All rights reserved.</p>
+                <p className="text-sm text-slate-400">© {new Date().getFullYear()} Pune Municipal Corporation. All rights reserved.</p>
                 <div className="flex items-center space-x-6 text-xs text-slate-500">
                   <a href="#" className="hover:text-amber-400 transition-colors duration-200">Privacy Policy</a>
                   <a href="#" className="hover:text-amber-400 transition-colors duration-200">Terms of Service</a>

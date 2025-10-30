@@ -120,7 +120,7 @@ export const PaymentCallbackPage: React.FC = () => {
     try {
       // Generate and download receipt
       const receiptContent = `
-PIMPRI-CHINCHWAD MUNICIPAL CORPORATION
+PUNE MUNICIPAL CORPORATION
 Payment Receipt
 
 Application Number: ${paymentData.applicationNumber}

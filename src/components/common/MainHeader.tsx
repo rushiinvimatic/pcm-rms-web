@@ -45,8 +45,8 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ variant = 'default' }) =
             <PMCLogo size="medium" />
           </div>
           <div className="transition-opacity duration-300 group-hover:opacity-90">
-            <h1 className="text-lg font-bold text-slate-900">PCMC Registration Portal</h1>
-            <p className="text-xs text-amber-600 font-medium">Pimpri-Chinchwad Municipal Corporation</p>
+            <h1 className="text-lg font-bold text-slate-900">PMC Registration Portal</h1>
+            <p className="text-xs text-amber-600 font-medium">Pune Municipal Corporation</p>
             <p className="text-xs text-slate-500">Government of Maharashtra</p>
           </div>
         </Link>
@@ -54,7 +54,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ variant = 'default' }) =
         {/* Desktop Navigation */}
         {variant === 'default' && (
           <nav className="hidden md:flex items-center space-x-8">
-            {['Citizen Services', 'Application Status', 'Support', 'About PCMC'].map((item, index) => (
+            {['Citizen Services', 'Application Status', 'Support', 'About PMC'].map((item, index) => (
               <Link 
                 key={index}
                 to={item === 'Citizen Services' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`} 
@@ -131,7 +131,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ variant = 'default' }) =
           )}
         >
           <nav className="container mx-auto px-4 py-6 flex flex-col space-y-4">
-            {['Citizen Services', 'Application Status', 'Support', 'About PCMC'].map((item, index) => (
+            {['Citizen Services', 'Application Status', 'Support', 'About PMC'].map((item, index) => (
               <Link 
                 key={index}
                 to={item === 'Citizen Services' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`}

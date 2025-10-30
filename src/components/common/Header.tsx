@@ -33,8 +33,8 @@ export const Header: React.FC<HeaderProps> = ({ title, subtitle }) => {
             {/* PMC Logo */}
             <PMCLogo size="medium" />
             <div>
-              <h1 className="text-xl font-bold text-slate-900">PCMC Registration Portal</h1>
-              <p className="text-sm text-amber-600 font-medium">Pimpri-Chinchwad Municipal Corporation</p>
+              <h1 className="text-xl font-bold text-slate-900">PMC Registration Portal</h1>
+              <p className="text-sm text-amber-600 font-medium">Pune Municipal Corporation</p>
               <p className="text-xs text-slate-500">Government of Maharashtra</p>
             </div>
           </div>
@@ -68,7 +68,7 @@ export const Header: React.FC<HeaderProps> = ({ title, subtitle }) => {
                   {user?.name || (user?.email?.split('@')[0] || 'User')}
                 </div>
                 <div className="text-xs text-slate-500">
-                  PCMC Portal Access
+                  PMC Portal Access
                 </div>
               </div>
               <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,7 +83,7 @@ export const Header: React.FC<HeaderProps> = ({ title, subtitle }) => {
                   <div className="px-4 py-3 text-sm text-slate-700 border-b border-slate-100 bg-slate-50">
                     <div className="font-semibold text-slate-900">{user?.name || (user?.email?.split('@')[0] || 'User')}</div>
                     <div className="text-xs text-slate-500">{user?.email}</div>
-                    <div className="text-xs text-amber-600 font-medium mt-1">PCMC Portal User</div>
+                    <div className="text-xs text-amber-600 font-medium mt-1">PMC Portal User</div>
                   </div>
                   
                   <button
