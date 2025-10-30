@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
 import { Label } from '../../../components/ui/label';
+import { Card } from '../../../components/ui/card';
 import { TaskList } from '../../../components/common/TaskList';
 import { OTPModal } from '../../../components/common/OTPModal';
-
 import { DocumentViewer } from '../../../components/common/DocumentViewer/DocumentViewer';
+import { RefreshCw, FileText, Clock, CheckCircle, Award } from 'lucide-react';
 import { useToast } from '../../../hooks/use-toast';
 import { useLoading } from '../../../hooks/useLoading';
 import { appointmentService } from '../../../services/appointment.service';
@@ -517,131 +518,143 @@ export const CityEngineerDashboard: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">City Engineer Dashboard</h1>
-        <p className="text-gray-600">Final review, approval, and digital signature authority</p>
-      </div>
-
-      {/* Tab Navigation */}
-      <div className="mb-6 border-b border-gray-200">
-        <nav className="-mb-px flex space-x-8">
-          <button
-            onClick={() => setActiveTab('stage1')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'stage1'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            }`}
-          >
-            Stage 1 (Pre-Payment) ({stage1Apps.length})
-          </button>
-          <button
-            onClick={() => setActiveTab('stage2')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'stage2'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            }`}
-          >
-            Stage 2 (Final Approval) ({stage2Apps.length})
-          </button>
-        </nav>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        {activeTab === 'stage1' ? (
-          <>
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <div className="text-2xl font-bold text-blue-600">{stats.stage1.total}</div>
-              <div className="text-sm text-gray-600">Total Stage 1</div>
-            </div>
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <div className="text-2xl font-bold text-orange-600">{stats.stage1.pending}</div>
-              <div className="text-sm text-gray-600">Pending Review</div>
-            </div>
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <div className="text-2xl font-bold text-green-600">{stats.stage1.approved}</div>
-              <div className="text-sm text-gray-600">Approved for Payment</div>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <div className="text-2xl font-bold text-blue-600">{stats.stage2.total}</div>
-              <div className="text-sm text-gray-600">Total Stage 2</div>
-            </div>
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <div className="text-2xl font-bold text-orange-600">{stats.stage2.pending}</div>
-              <div className="text-sm text-gray-600">Pending Final Review</div>
-            </div>
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <div className="text-2xl font-bold text-emerald-600">{stats.stage2.issued}</div>
-              <div className="text-sm text-gray-600">Certificates Issued</div>
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* Filters */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-between mb-8">
           <div>
-            <Label htmlFor="search">Search</Label>
-            <Input
-              id="search"
-              placeholder="Name or Application Number"
-              value={filters.search}
-              onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-            />
+            <h1 className="text-3xl font-bold text-gray-900">City Engineer Dashboard</h1>
+            <p className="mt-1 text-sm text-gray-600">Final review, approval, and digital signature authority</p>
           </div>
-          <div>
-            <Label htmlFor="status">Status</Label>
-            <select
-              id="status"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              value={filters.status}
-              onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-            >
-              <option value="">All Statuses</option>
-              {activeTab === 'stage1' ? (
-                <>
-                  <option value="FORWARDED_TO_CE_STAGE1">Pending Review</option>
-                  <option value="APPROVED_BY_CE_STAGE1">Approved for Payment</option>
-                </>
-              ) : (
-                <>
-                  <option value="FORWARDED_TO_CE_STAGE2">Pending Final Review</option>
-                  <option value="SIGNED_BY_CE_STAGE2">Final Signed</option>
-                  <option value="CERTIFICATE_ISSUED">Certificate Issued</option>
-                </>
-              )}
-            </select>
-          </div>
-          <div>
-            <Label htmlFor="position">Position</Label>
-            <select
-              id="position"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              value={filters.position}
-              onChange={(e) => setFilters(prev => ({ ...prev, position: e.target.value }))}
-            >
-              <option value="">All Positions</option>
-              <option value="Architect">Architect</option>
-              <option value="Structural Engineer">Structural Engineer</option>
-              <option value="Licence Engineer">Licence Engineer</option>
-              <option value="Supervisor 1">Supervisor 1</option>
-              <option value="Supervisor 2">Supervisor 2</option>
-            </select>
-          </div>
-          <div className="flex items-end">
-            <Button onClick={fetchApplications} variant="outline" className="w-full">
-              Refresh
-            </Button>
+          <Button onClick={() => { fetchApplications(); }} variant="outline" className="flex items-center">
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Refresh
+          </Button>
+        </div>
+
+        {/* Tabs and Search Bar */}
+        <div className="bg-white rounded-lg shadow-sm mb-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4">
+            <nav className="flex gap-2">
+              <button
+                onClick={() => setActiveTab('stage1')}
+                className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${
+                  activeTab === 'stage1'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                Stage 1 (Pre-Payment)
+                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
+                  activeTab === 'stage1' ? 'bg-blue-500' : 'bg-gray-200 text-gray-700'
+                }`}>
+                  {stage1Apps.length}
+                </span>
+              </button>
+              <button
+                onClick={() => setActiveTab('stage2')}
+                className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${
+                  activeTab === 'stage2'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                Stage 2 (Final Approval)
+                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
+                  activeTab === 'stage2' ? 'bg-blue-500' : 'bg-gray-200 text-gray-700'
+                }`}>
+                  {stage2Apps.length}
+                </span>
+              </button>
+            </nav>
+            
+            {/* Search Field */}
+            <div className="relative w-full md:w-96">
+              <Input
+                id="search"
+                placeholder="Search by name or application number..."
+                value={filters.search}
+                onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+                className="pl-4"
+              />
+            </div>
           </div>
         </div>
-      </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {activeTab === 'stage1' ? (
+            <>
+              <Card className="border-l-4 border-l-blue-500 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Total Stage 1</p>
+                    <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage1.total}</p>
+                  </div>
+                  <div className="p-3 bg-blue-100 rounded-lg">
+                    <FileText className="h-6 w-6 text-blue-600" />
+                  </div>
+                </div>
+              </Card>
+              <Card className="border-l-4 border-l-orange-500 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Pending Review</p>
+                    <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage1.pending}</p>
+                  </div>
+                  <div className="p-3 bg-orange-100 rounded-lg">
+                    <Clock className="h-6 w-6 text-orange-600" />
+                  </div>
+                </div>
+              </Card>
+              <Card className="border-l-4 border-l-green-500 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Approved for Payment</p>
+                    <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage1.approved}</p>
+                  </div>
+                  <div className="p-3 bg-green-100 rounded-lg">
+                    <CheckCircle className="h-6 w-6 text-green-600" />
+                  </div>
+                </div>
+              </Card>
+            </>
+          ) : (
+            <>
+              <Card className="border-l-4 border-l-blue-500 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Total Stage 2</p>
+                    <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage2.total}</p>
+                  </div>
+                  <div className="p-3 bg-blue-100 rounded-lg">
+                    <FileText className="h-6 w-6 text-blue-600" />
+                  </div>
+                </div>
+              </Card>
+              <Card className="border-l-4 border-l-orange-500 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Pending Final Review</p>
+                    <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage2.pending}</p>
+                  </div>
+                  <div className="p-3 bg-orange-100 rounded-lg">
+                    <Clock className="h-6 w-6 text-orange-600" />
+                  </div>
+                </div>
+              </Card>
+              <Card className="border-l-4 border-l-emerald-500 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Certificates Issued</p>
+                    <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage2.issued}</p>
+                  </div>
+                  <div className="p-3 bg-emerald-100 rounded-lg">
+                    <Award className="h-6 w-6 text-emerald-600" />
+                  </div>
+                </div>
+              </Card>
+            </>
+          )}
+        </div>
 
       {/* Applications List */}
       <div className="bg-white rounded-lg border border-gray-200">
@@ -1142,6 +1155,7 @@ export const CityEngineerDashboard: React.FC = () => {
           }}
         />
       )}
+      </div>
     </div>
   );
 };

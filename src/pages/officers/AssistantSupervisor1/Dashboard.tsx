@@ -311,40 +311,18 @@ export const AssistantSupervisor1Dashboard: React.FC = () => {
         </Card>
       </div>
 
-      {/* Filters */}
-      <Card className="p-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input
-              placeholder="Search applications..."
-              value={filters.search}
-              onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-              className="pl-10"
-            />
-          </div>
-          
-          <select
-            value={filters.position}
-            onChange={(e) => setFilters({ ...filters, position: e.target.value })}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">All Positions</option>
-            <option value="0">Architect</option>
-            <option value="1">Structural Engineer</option>
-            <option value="2">Licence Engineer</option>
-            <option value="3">Supervisor1</option>
-            <option value="4">Supervisor2</option>
-          </select>
-
-          <Button
-            variant="outline"
-            onClick={() => setFilters({ position: '', search: '' })}
-          >
-            Clear Filters
-          </Button>
+      {/* Search Bar */}
+      <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Input
+            placeholder="Search applications..."
+            value={filters.search}
+            onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+            className="pl-10"
+          />
         </div>
-      </Card>
+      </div>
 
       {/* Applications List */}
       <div className="space-y-4">

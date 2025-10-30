@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
 import { Label } from '../../../components/ui/label';
+import { Card } from '../../../components/ui/card';
 import { TaskList } from '../../../components/common/TaskList';
 import { OTPModal } from '../../../components/common/OTPModal';
 import { StatusProgress } from '../../../components/common/StatusTracker/StatusProgress';
@@ -11,6 +12,7 @@ import { appointmentService } from '../../../services/appointment.service';
 import { applicationService } from '../../../services/application.service';
 import { ApplicationStage } from '../../../types/application';
 import type { Application, OTPVerificationData } from '../../../types/dashboard';
+import { RefreshCw, FileText, Clock, CheckCircle, Banknote } from 'lucide-react';
 
 export const ClerkDashboard: React.FC = () => {
   const [applications, setApplications] = useState<Application[]>([]);
@@ -221,80 +223,81 @@ export const ClerkDashboard: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Clerk Dashboard</h1>
-        <p className="text-gray-600">Process post-payment applications and generate certificate numbers</p>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-lg border border-gray-200">
-          <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
-          <div className="text-sm text-gray-600">Total Applications</div>
-        </div>
-        <div className="bg-white p-4 rounded-lg border border-gray-200">
-          <div className="text-2xl font-bold text-orange-600">{stats.pending}</div>
-          <div className="text-sm text-gray-600">Pending Processing</div>
-        </div>
-        <div className="bg-white p-4 rounded-lg border border-gray-200">
-          <div className="text-2xl font-bold text-green-600">{stats.processed}</div>
-          <div className="text-sm text-gray-600">Processed</div>
-        </div>
-        <div className="bg-white p-4 rounded-lg border border-gray-200">
-          <div className="text-2xl font-bold text-emerald-600">{stats.withPayment}</div>
-          <div className="text-sm text-gray-600">Payment Completed</div>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-between mb-8">
           <div>
-            <Label htmlFor="search">Search</Label>
+            <h1 className="text-3xl font-bold text-gray-900">Clerk Dashboard</h1>
+            <p className="mt-1 text-sm text-gray-600">Process post-payment applications and generate certificate numbers</p>
+          </div>
+          <Button onClick={() => fetchApplications()} variant="outline" className="flex items-center">
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Refresh
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <Card className="border-l-4 border-l-blue-500 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Total Applications</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.total}</p>
+              </div>
+              <div className="p-3 bg-blue-100 rounded-lg">
+                <FileText className="h-6 w-6 text-blue-600" />
+              </div>
+            </div>
+          </Card>
+
+          <Card className="border-l-4 border-l-orange-500 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Pending Processing</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.pending}</p>
+              </div>
+              <div className="p-3 bg-orange-100 rounded-lg">
+                <Clock className="h-6 w-6 text-orange-600" />
+              </div>
+            </div>
+          </Card>
+
+          <Card className="border-l-4 border-l-green-500 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Processed</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.processed}</p>
+              </div>
+              <div className="p-3 bg-green-100 rounded-lg">
+                <CheckCircle className="h-6 w-6 text-green-600" />
+              </div>
+            </div>
+          </Card>
+
+          <Card className="border-l-4 border-l-emerald-500 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Payment Completed</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.withPayment}</p>
+              </div>
+              <div className="p-3 bg-emerald-100 rounded-lg">
+                <Banknote className="h-6 w-6 text-emerald-600" />
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Search Bar */}
+        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+          <div className="relative max-w-md">
             <Input
               id="search"
-              placeholder="Name or Application Number"
+              placeholder="Search by name or application number..."
               value={filters.search}
               onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+              className="pl-4"
             />
           </div>
-          <div>
-            <Label htmlFor="status">Status</Label>
-            <select
-              id="status"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              value={filters.status}
-              onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-            >
-              <option value="">All Statuses</option>
-              <option value="FORWARDED_TO_CLERK">Pending Processing</option>
-              <option value="PROCESSED_BY_CLERK">Processed</option>
-            </select>
-          </div>
-          <div>
-            <Label htmlFor="position">Position</Label>
-            <select
-              id="position"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              value={filters.position}
-              onChange={(e) => setFilters(prev => ({ ...prev, position: e.target.value }))}
-            >
-              <option value="">All Positions</option>
-              <option value="Architect">Architect</option>
-              <option value="Structural Engineer">Structural Engineer</option>
-              <option value="Licence Engineer">Licence Engineer</option>
-              <option value="Supervisor 1">Supervisor 1</option>
-              <option value="Supervisor 2">Supervisor 2</option>
-            </select>
-          </div>
-          <div className="flex items-end">
-            <Button onClick={() => fetchApplications()} variant="outline" className="w-full">
-              Refresh
-            </Button>
-          </div>
         </div>
-      </div>
 
       {/* Applications List */}
       <div className="bg-white rounded-lg border border-gray-200">
@@ -549,6 +552,7 @@ export const ClerkDashboard: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

@@ -525,94 +525,51 @@ export const ExecutiveEngineerDashboard: React.FC = () => {
           </p>
         </div>
 
-        {/* Stage Tabs */}
-        <div className="mb-6 border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8">
-            <button
-              onClick={() => setActiveTab('stage1')}
-              className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'stage1'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              Stage 1 - Initial Approval
-              <span className="ml-2 bg-blue-100 text-blue-600 py-0.5 px-2 rounded-full text-xs">
-                {getStageApplications('stage1').length}
-              </span>
-            </button>
-            <button
-              onClick={() => setActiveTab('stage2')}
-              className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'stage2'
-                  ? 'border-green-500 text-green-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              Stage 2 - Final Signature
-              <span className="ml-2 bg-green-100 text-green-600 py-0.5 px-2 rounded-full text-xs">
-                {getStageApplications('stage2').length}
-              </span>
-            </button>
-          </nav>
-        </div>
-
-        {/* Filters */}
-        <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-              <Label htmlFor="search">Search</Label>
+        {/* Tabs and Search Bar */}
+        <div className="bg-white rounded-lg shadow-sm mb-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4">
+            <nav className="flex gap-2">
+              <button
+                onClick={() => setActiveTab('stage1')}
+                className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${
+                  activeTab === 'stage1'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                Stage 1 - Initial Approval
+                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
+                  activeTab === 'stage1' ? 'bg-blue-500' : 'bg-gray-200 text-gray-700'
+                }`}>
+                  {getStageApplications('stage1').length}
+                </span>
+              </button>
+              <button
+                onClick={() => setActiveTab('stage2')}
+                className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${
+                  activeTab === 'stage2'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                Stage 2 - Final Signature
+                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
+                  activeTab === 'stage2' ? 'bg-blue-500' : 'bg-gray-200 text-gray-700'
+                }`}>
+                  {getStageApplications('stage2').length}
+                </span>
+              </button>
+            </nav>
+            
+            {/* Search Field */}
+            <div className="relative w-full md:w-96">
               <Input
                 id="search"
-                placeholder="Application number or name..."
+                placeholder="Search by application number or name..."
                 value={filters.search}
                 onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+                className="pl-4"
               />
-            </div>
-            <div>
-              <Label htmlFor="status">Status</Label>
-              <select
-                id="status"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={filters.status}
-                onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-              >
-                <option value="">All Statuses</option>
-                {activeTab === 'stage1' ? (
-                  <>
-                    <option value="FORWARDED_TO_EE">Pending Review</option>
-                    <option value="SIGNED_BY_EE_STAGE1">Signed</option>
-                  </>
-                ) : (
-                  <>
-                    <option value="FORWARDED_TO_EE_STAGE2">Pending Final Signature</option>
-                    <option value="SIGNED_BY_EE_STAGE2">Final Signature Applied</option>
-                  </>
-                )}
-              </select>
-            </div>
-            <div>
-              <Label htmlFor="position">Position</Label>
-              <select
-                id="position"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={filters.position}
-                onChange={(e) => setFilters(prev => ({ ...prev, position: e.target.value }))}
-              >
-                <option value="">All Positions</option>
-                <option value="Architect">Architect</option>
-                <option value="Structural Engineer">Structural Engineer</option>
-                <option value="Civil Engineer">Civil Engineer</option>
-              </select>
-            </div>
-            <div className="flex items-end">
-              <Button
-                onClick={() => setFilters({ status: '', position: '', search: '' })}
-                variant="outline"
-                className="w-full"
-              >
-                Clear Filters
-              </Button>
             </div>
           </div>
         </div>

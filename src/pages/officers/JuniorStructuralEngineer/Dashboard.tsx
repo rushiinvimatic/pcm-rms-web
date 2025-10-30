@@ -592,126 +592,130 @@ export const JuniorStructuralEngineerDashboard: React.FC = () => {
   const filteredScheduledApplications = filterApplications(scheduledApplications);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col space-y-8">
-        <div className="flex flex-row md:flex-row md:items-center md:justify-between">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Junior Structural Engineer Dashboard</h1>
-            <p className="text-gray-600">Review Applications & Verify Documents</p>
+            <h1 className="text-3xl font-bold text-gray-900">Junior Structural Engineer Dashboard</h1>
+            <p className="mt-1 text-sm text-gray-600">Review Applications & Verify Documents</p>
           </div>
-          <div className="mt-4 md:mt-0 flex space-x-2">
-            <Button
-              onClick={() => { fetchPendingApplications(); fetchScheduledApplications(); }}
-              variant="outline"
-              className="flex items-center"
-            >
-              <RefreshIcon className="w-4 h-4 mr-2" />
-              Refresh
-            </Button>
-          </div>
+          <Button
+            onClick={() => { fetchPendingApplications(); fetchScheduledApplications(); }}
+            variant="outline"
+            className="flex items-center"
+          >
+            <RefreshIcon className="w-4 h-4 mr-2" />
+            Refresh
+          </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4">
-            <div className="flex items-center">
-              <div className="p-2 bg-yellow-100 rounded-lg">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <Card className="border-l-4 border-l-yellow-500 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Pending Review</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.pendingReview}</p>
+              </div>
+              <div className="p-3 bg-yellow-100 rounded-lg">
                 <Clock className="h-6 w-6 text-yellow-600" />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Pending Review</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.pendingReview}</p>
-              </div>
             </div>
           </Card>
 
-          <Card className="p-4">
-            <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
+          <Card className="border-l-4 border-l-blue-500 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Document Verification</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.scheduledVerification}</p>
+              </div>
+              <div className="p-3 bg-blue-100 rounded-lg">
                 <Calendar className="h-6 w-6 text-blue-600" />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Document Verification</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.scheduledVerification}</p>
-              </div>
             </div>
           </Card>
 
-          <Card className="p-4">
-            <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg">
+          <Card className="border-l-4 border-l-green-500 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Total Processed</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalProcessed}</p>
+              </div>
+              <div className="p-3 bg-green-100 rounded-lg">
                 <FileText className="h-6 w-6 text-green-600" />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Processed</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalProcessed}</p>
-              </div>
             </div>
           </Card>
 
-          <Card className="p-4">
-            <div className="flex items-center">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <Building className="h-6 w-6 text-purple-600" />
-              </div>
-              <div className="ml-4">
+          <Card className="border-l-4 border-l-purple-500 p-6">
+            <div className="flex items-center justify-between">
+              <div>
                 <p className="text-sm font-medium text-gray-600">Applications</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.architectApplications}</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.architectApplications}</p>
+              </div>
+              <div className="p-3 bg-purple-100 rounded-lg">
+                <Building className="h-6 w-6 text-purple-600" />
               </div>
             </div>
           </Card>
         </div>
 
-        <Card className="p-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="relative">
+        {/* Tabs and Search Bar */}
+        <div className="bg-white rounded-lg shadow-sm mb-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4">
+            <nav className="flex gap-2">
+              <button
+                onClick={() => setActiveTab('pending')}
+                className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${
+                  activeTab === 'pending'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                Pending Applications
+                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
+                  activeTab === 'pending' ? 'bg-blue-500' : 'bg-gray-200 text-gray-700'
+                }`}>
+                  {filteredPendingApplications.length}
+                </span>
+              </button>
+              <button
+                onClick={() => setActiveTab('verification')}
+                className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${
+                  activeTab === 'verification'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                Document Verification
+                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
+                  activeTab === 'verification' ? 'bg-blue-500' : 'bg-gray-200 text-gray-700'
+                }`}>
+                  {filteredScheduledApplications.length}
+                </span>
+              </button>
+            </nav>
+            
+            {/* Search Field */}
+            <div className="relative w-full md:w-96">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
+                id="search"
                 placeholder="Search applications..."
                 value={filters.search}
                 onChange={(e) => setFilters({ ...filters, search: e.target.value })}
                 className="pl-10"
               />
             </div>
-            
-            <select
-              value={filters.position}
-              onChange={(e) => setFilters({ ...filters, position: e.target.value })}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">All Positions</option>
-              <option value="0">Architect</option>
-              <option value="1">Structural Engineer</option>
-              <option value="2">Licence Engineer</option>
-              <option value="3">Supervisor1</option>
-              <option value="4">Supervisor2</option>
-            </select>
-
-            <select
-              value={filters.stage}
-              onChange={(e) => setFilters({ ...filters, stage: e.target.value })}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">All Stages</option>
-              <option value="0">Junior Engineer Pending</option>
-              <option value="1">Document Verification Pending</option>
-            </select>
-
-            <Button
-              variant="outline"
-              onClick={() => setFilters({ stage: '', position: '', search: '' })}
-            >
-              Clear Filters
-            </Button>
           </div>
-        </Card>
+        </div>
 
-        <div className="border-b border-gray-200">
+        <div className="border-b border-gray-200 mb-6 hidden">
           <nav className="-mb-px flex space-x-8">
             <button
               onClick={() => setActiveTab('pending')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'pending'
-                  ? 'border-blue-500 text-blue-600'
+                  ? 'border-blue-600 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
@@ -719,9 +723,9 @@ export const JuniorStructuralEngineerDashboard: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('verification')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'verification'
-                  ? 'border-blue-500 text-blue-600'
+                  ? 'border-blue-600 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >

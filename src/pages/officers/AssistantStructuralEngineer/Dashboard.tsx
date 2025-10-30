@@ -298,30 +298,18 @@ export const AssistantStructuralEngineerDashboard: React.FC = () => {
           </Card>
         </div>
 
-        {/* Filters */}
-        <Card className="p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input
-                placeholder="Search applications..."
-                value={filters.search}
-                onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                className="pl-10"
-              />
-            </div>
-
-            <div className="flex items-end">
-              <Button
-                onClick={() => setFilters({ position: '', search: '' })}
-                variant="outline"
-                className="w-full"
-              >
-                Clear Filters
-              </Button>
-            </div>
+        {/* Search Bar */}
+        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Search applications..."
+              value={filters.search}
+              onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+              className="pl-10"
+            />
           </div>
-        </Card>
+        </div>
 
         {/* Applications List */}
         <div className="space-y-6">

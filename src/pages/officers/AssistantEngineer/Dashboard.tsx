@@ -16,8 +16,10 @@ import {
   Building, 
   Search,
   Calendar,
-  User
+  User,
+  RefreshCw as RefreshIcon
 } from 'lucide-react';
+import { Label } from '../../../components/ui/label';
 import { appointmentService } from '../../../services/appointment.service';
 import { applicationService } from '../../../services/application.service';
 import { 
@@ -278,106 +280,86 @@ export const AssistantEngineerDashboard: React.FC = () => {
   const filteredApplications = filterApplications(applications);
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Assistant Engineer Dashboard</h1>
-          <p className="text-gray-600">Review & Approve Applications with Digital Signature</p>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Assistant Engineer Dashboard</h1>
+            <p className="mt-1 text-sm text-gray-600">Review & Approve Applications with Digital Signature</p>
+          </div>
+          <Button 
+            onClick={() => fetchPendingApplications()}
+            variant="outline"
+            className="flex items-center"
+          >
+            <RefreshIcon className="w-4 h-4 mr-2" />
+            Refresh
+          </Button>
         </div>
-        <Button 
-          onClick={() => fetchPendingApplications()}
-          className="bg-blue-600 hover:bg-blue-700"
-        >
-          Refresh
-        </Button>
-      </div>
 
-      {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="p-4">
-          <div className="flex items-center">
-            <div className="p-2 bg-orange-100 rounded-lg">
-              <Clock className="h-6 w-6 text-orange-600" />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <Card className="border-l-4 border-l-orange-500 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Pending Approval</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.pendingApproval}</p>
+              </div>
+              <div className="p-3 bg-orange-100 rounded-lg">
+                <Clock className="h-6 w-6 text-orange-600" />
+              </div>
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Pending Approval</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.pendingApproval}</p>
-            </div>
-          </div>
-        </Card>
+          </Card>
 
-        <Card className="p-4">
-          <div className="flex items-center">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <CheckCircle className="h-6 w-6 text-green-600" />
+          <Card className="border-l-4 border-l-green-500 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Total Processed</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalProcessed}</p>
+              </div>
+              <div className="p-3 bg-green-100 rounded-lg">
+                <CheckCircle className="h-6 w-6 text-green-600" />
+              </div>
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total Processed</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.totalProcessed}</p>
-            </div>
-          </div>
-        </Card>
+          </Card>
 
-        <Card className="p-4">
-          <div className="flex items-center">
-            <div className="p-2 bg-purple-100 rounded-lg">
-              <Building className="h-6 w-6 text-purple-600" />
+          <Card className="border-l-4 border-l-purple-500 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Architect Applications</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.architectApplications}</p>
+              </div>
+              <div className="p-3 bg-purple-100 rounded-lg">
+                <Building className="h-6 w-6 text-purple-600" />
+              </div>
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Architect Applications</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.architectApplications}</p>
-            </div>
-          </div>
-        </Card>
+          </Card>
 
-        <Card className="p-4">
-          <div className="flex items-center">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <Calendar className="h-6 w-6 text-blue-600" />
+          <Card className="border-l-4 border-l-blue-500 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Avg. Processing Time</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.averageProcessingTime} days</p>
+              </div>
+              <div className="p-3 bg-blue-100 rounded-lg">
+                <Calendar className="h-6 w-6 text-blue-600" />
+              </div>
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Avg. Processing Time</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.averageProcessingTime} days</p>
-            </div>
-          </div>
-        </Card>
-      </div>
+          </Card>
+        </div>
 
-      {/* Filters */}
-      <Card className="p-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="relative">
+        {/* Search Bar */}
+        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+          <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
+              id="search"
               placeholder="Search applications..."
               value={filters.search}
               onChange={(e) => setFilters({ ...filters, search: e.target.value })}
               className="pl-10"
             />
           </div>
-          
-          <select
-            value={filters.position}
-            onChange={(e) => setFilters({ ...filters, position: e.target.value })}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">All Positions</option>
-            <option value="0">Architect</option>
-            <option value="1">Structural Engineer</option>
-            <option value="2">Licence Engineer</option>
-            <option value="3">Supervisor1</option>
-            <option value="4">Supervisor2</option>
-          </select>
-
-          <Button
-            variant="outline"
-            onClick={() => setFilters({ position: '', search: '' })}
-          >
-            Clear Filters
-          </Button>
         </div>
-      </Card>
 
       {/* Applications List */}
       <div className="space-y-4">
@@ -532,6 +514,7 @@ export const AssistantEngineerDashboard: React.FC = () => {
           description="Please enter the OTP to approve this application and apply your digital signature."
         />
       )}
+      </div>
     </div>
   );
 };

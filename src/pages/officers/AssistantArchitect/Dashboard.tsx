@@ -355,33 +355,20 @@ export const AssistantArchitectDashboard: React.FC = () => {
           />
         </div>
 
-        {/* Filters */}
-        <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative flex-grow">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-gray-400" />
-              </div>
-              <Input
-                type="text"
-                name="search"
-                placeholder="Search by application number or name"
-                className="pl-10"
-                value={filters.search}
-                onChange={handleFilterChange}
-              />
+        {/* Search Bar */}
+        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+          <div className="relative max-w-md">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search className="h-4 w-4 text-gray-400" />
             </div>
-            <div className="w-full md:w-64">
-              <select
-                name="position"
-                value={filters.position}
-                onChange={handleFilterChange}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">All Position Types</option>
-                <option value="0">Architect</option>
-              </select>
-            </div>
+            <Input
+              type="text"
+              name="search"
+              placeholder="Search by application number or name"
+              className="pl-10"
+              value={filters.search}
+              onChange={handleFilterChange}
+            />
           </div>
         </div>
 
