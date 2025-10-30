@@ -124,35 +124,46 @@ export const paymentService = {
   },
 
   /**
-   * Initiate payment process
+   * Initiate payment process with BillDesk
    */
   initiatePayment: async (applicationId: string): Promise<any> => {
     try {
-      console.log('[PaymentService] Initiating payment for applicationId:', applicationId);
-      const response = await api.post('/Payment/initiate', { applicationId });
+      console.log('[PaymentService] Initiating BillDesk payment for applicationId:', applicationId);
+      const response = await api.post('/Payment/Initiate', { applicationId });
       
       console.log('[PaymentService] Raw API response:', response);
       console.log('[PaymentService] Response data:', response.data);
       
       // Response structure from backend:
       // {
-      //   "success": true, 
+      //   "success": true,
       //   "message": "Payment initiated successfully",
       //   "data": {
-      //     "formAction": "https://uat1.billdesk.com/pgidsk/PGIMerchantPayment",
-      //     "formFields": {
-      //       "merchantid": "UATPMCNTYA",
-      //       "bdorderid": "PMC2510271234",
-      //       "rdata": "JWT_TOKEN"  
-      //     },
-      //     "bdOrderId": "PMC2510271234",
-      //     "rData": "JWT_TOKEN",
+      //     "bdOrderId": "BD123456789",
+      //     "rData": "eyJhbGciOiJSU0E...",
       //     "paymentGatewayUrl": "https://uat1.billdesk.com/pgidsk/PGIMerchantPayment"
       //   }
       // }
       
       if (response.data?.success) {
         console.log('[PaymentService] Payment initiation successful');
+        const { bdOrderId, rData, paymentGatewayUrl } = response.data.data;
+        
+        // Automatically redirect to BillDesk payment gateway
+        if (bdOrderId && rData && paymentGatewayUrl) {
+          console.log('[PaymentService] Redirecting to BillDesk payment gateway...');
+          
+          // Construct payment URL with proper encoding
+          const paymentUrl = `${paymentGatewayUrl}?bdorderid=${encodeURIComponent(
+            bdOrderId
+          )}&rdata=${encodeURIComponent(rData)}`;
+          
+          console.log('[PaymentService] Payment URL:', paymentUrl);
+          
+          // Redirect to BillDesk
+          window.location.href = paymentUrl;
+        }
+        
         return response.data; // Return the full response structure
       } else {
         console.error('[PaymentService] Payment initiation failed:', response.data);
