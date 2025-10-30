@@ -168,19 +168,25 @@ export const MyApplicationsPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="p-8 flex justify-center items-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="flex justify-center items-center min-h-[400px]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto mb-4"></div>
+            <p className="text-slate-600">Loading your applications...</p>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-8">
+      <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-          <div className="text-red-600 mb-2">⚠️ Error</div>
-          <p className="text-red-800 mb-4">{error}</p>
-          <button 
+          <div className="text-red-600 text-4xl mb-3">⚠️</div>
+          <h3 className="text-lg font-semibold text-red-900 mb-2">Error Loading Applications</h3>
+          <p className="text-red-700 mb-4">{error}</p>
+          <Button 
             onClick={() => {
               setLoading(true);
               const fetchApplications = async () => {
@@ -205,58 +211,68 @@ export const MyApplicationsPage: React.FC = () => {
               };
               fetchApplications();
             }}
-            className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
+            variant="destructive"
           >
             Try Again
-          </button>
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-8">
-      <div className="mb-8 flex justify-between items-start">
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">My Applications</h2>
-          <p className="text-gray-600">Track and manage your submitted applications</p>
-        </div>
-        <button
-          onClick={() => {
-            setLoading(true);
-            const fetchApplications = async () => {
-              try {
-                setError(null);
-                const filterStatus = filter === 'all' ? undefined : filter;
-                const response: ApiResponse = await applicationService.fetchApplications(filterStatus, 1, 10);
-                
-                if (response.success) {
-                  setApplications(response.data);
-                } else {
-                  setError('Failed to fetch applications');
+    <div className="max-w-7xl mx-auto px-6 py-8">
+      {/* Page Header */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <div className="flex items-center mb-3">
+              <div className="h-1 w-12 bg-amber-500 mr-3"></div>
+              <span className="text-slate-600 text-sm font-semibold tracking-wider uppercase">My Applications</span>
+            </div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">
+              My Applications
+            </h1>
+            <p className="text-slate-600">
+              Track and manage your submitted applications
+            </p>
+          </div>
+          <Button
+            onClick={() => {
+              setLoading(true);
+              const fetchApplications = async () => {
+                try {
+                  setError(null);
+                  const filterStatus = filter === 'all' ? undefined : filter;
+                  const response: ApiResponse = await applicationService.fetchApplications(filterStatus, 1, 10);
+                  
+                  if (response.success) {
+                    setApplications(response.data);
+                  } else {
+                    setError('Failed to fetch applications');
+                    setApplications([]);
+                  }
+                } catch (error) {
+                  console.error('Error fetching applications:', error);
+                  setError('Error loading applications. Please try again.');
                   setApplications([]);
+                } finally {
+                  setLoading(false);
                 }
-              } catch (error) {
-                console.error('Error fetching applications:', error);
-                setError('Error loading applications. Please try again.');
-                setApplications([]);
-              } finally {
-                setLoading(false);
-              }
-            };
-            fetchApplications();
-          }}
-          className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
-          disabled={loading}
-        >
-          <span>🔄</span>
-          <span>Refresh</span>
-        </button>
+              };
+              fetchApplications();
+            }}
+            variant="outline"
+            disabled={loading}
+          >
+            🔄 Refresh
+          </Button>
+        </div>
       </div>
 
       {/* Filter Tabs */}
       <div className="mb-6">
-        <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-fit">
+        <div className="flex flex-wrap gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200">
           {[
             { key: 'all' as const, label: 'All Applications' },
             { key: 1 as const, label: 'Submitted' },
@@ -268,10 +284,10 @@ export const MyApplicationsPage: React.FC = () => {
             <button
               key={tab.key}
               onClick={() => setFilter(tab.key)}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
                 filter === tab.key
-                  ? 'bg-white text-blue-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-white text-amber-600 shadow-sm ring-2 ring-amber-500 ring-opacity-50'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white'
               }`}
             >
               {tab.label}
@@ -282,25 +298,32 @@ export const MyApplicationsPage: React.FC = () => {
 
       {/* Applications List */}
       {filteredApplications.length === 0 ? (
-        <div className="text-center py-12">
-          <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No applications found</h3>
-          <p className="text-gray-600">
-            {filter === 'all' 
-              ? "You haven't submitted any applications yet." 
-              : `No applications with status "${filter}"`
-            }
-          </p>
+        <div className="bg-white rounded-lg border border-slate-200 shadow-sm">
+          <div className="text-center py-16">
+            <FileText className="h-16 w-16 text-slate-300 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">No applications found</h3>
+            <p className="text-slate-600 mb-6">
+              {filter === 'all' 
+                ? "You haven't submitted any applications yet." 
+                : `No applications with the selected status.`
+              }
+            </p>
+            {filter !== 'all' && (
+              <Button variant="outline" onClick={() => setFilter('all')}>
+                View All Applications
+              </Button>
+            )}
+          </div>
         </div>
       ) : (
         <div className="space-y-4">
           {filteredApplications.map(application => (
-            <div key={application.id} className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+            <div key={application.id} className="bg-white rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-all hover:border-amber-300">
               <div className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900">
+                    <div className="flex items-center gap-3 mb-3">
+                      <h3 className="text-lg font-semibold text-slate-900">
                         {application.applicationNumber}
                       </h3>
                       <Badge className={getApplicationStatusColor(application.status)}>
@@ -308,22 +331,22 @@ export const MyApplicationsPage: React.FC = () => {
                       </Badge>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-gray-600">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
                       <div>
-                        <span className="font-medium">Applicant Name:</span>
-                        <p>{`${application.firstName} ${application.middleName} ${application.lastName}`.trim()}</p>
+                        <span className="font-medium text-slate-600">Applicant Name:</span>
+                        <p className="text-slate-900 mt-1">{`${application.firstName} ${application.middleName} ${application.lastName}`.trim()}</p>
                       </div>
                       <div>
-                        <span className="font-medium">Position Type:</span>
-                        <p>{getPositionTypeLabel(application.positionType)}</p>
+                        <span className="font-medium text-slate-600">Position Type:</span>
+                        <p className="text-slate-900 mt-1">{getPositionTypeLabel(application.positionType)}</p>
                       </div>
                       <div>
-                        <span className="font-medium">Current Stage:</span>
-                        <p>{getApplicationStageLabel(application.currentStage)}</p>
+                        <span className="font-medium text-slate-600">Current Stage:</span>
+                        <p className="text-slate-900 mt-1">{getApplicationStageLabel(application.currentStage)}</p>
                       </div>
                       <div>
-                        <span className="font-medium">Submission Date:</span>
-                        <p>{new Date(application.submissionDate).toLocaleDateString('en-IN')}</p>
+                        <span className="font-medium text-slate-600">Submission Date:</span>
+                        <p className="text-slate-900 mt-1">{new Date(application.submissionDate).toLocaleDateString('en-IN')}</p>
                       </div>
                     </div>
                   </div>

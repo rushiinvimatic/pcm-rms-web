@@ -323,74 +323,79 @@ export const UserDashboard: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-6 py-8">
+      {/* Page Header */}
       <div className="mb-8">
-        <div className="flex items-center mb-4">
-          <div className="h-1 w-12 bg-amber-400 mr-4"></div>
-          <span className="text-slate-600 text-sm font-medium tracking-wider uppercase">Citizen Services</span>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <div className="flex items-center mb-3">
+              <div className="h-1 w-12 bg-amber-500 mr-3"></div>
+              <span className="text-slate-600 text-sm font-semibold tracking-wider uppercase">Dashboard</span>
+            </div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">
+              Welcome, {user?.name || (applications[0] ? `${applications[0].firstName} ${applications[0].lastName}` : 'Citizen')}
+            </h1>
+            <p className="text-slate-600">
+              Manage your municipal applications and track their status through our secure government portal
+            </p>
+          </div>
         </div>
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">
-          Welcome, {user?.name || (applications[0] ? `${applications[0].firstName} ${applications[0].lastName}` : 'Citizen')}
-        </h1>
-        <p className="text-slate-600 text-lg">
-          Manage your municipal applications and track their status through our secure government portal
-        </p>
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
           <div className="flex items-center">
-            <div className="p-2 bg-blue-100 rounded-full">
+            <div className="p-3 bg-blue-50 rounded-lg">
               <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total Applications</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
+              <p className="text-sm font-medium text-slate-600">Total Applications</p>
+              <p className="text-2xl font-bold text-slate-900">{stats.total}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow">
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
           <div className="flex items-center">
-            <div className="p-2 bg-yellow-100 rounded-full">
-              <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-3 bg-amber-50 rounded-lg">
+              <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">In Review</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.pending}</p>
+              <p className="text-sm font-medium text-slate-600">In Review</p>
+              <p className="text-2xl font-bold text-slate-900">{stats.pending}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow">
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
           <div className="flex items-center">
-            <div className="p-2 bg-green-100 rounded-full">
+            <div className="p-3 bg-green-50 rounded-lg">
               <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Approved</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.approved}</p>
+              <p className="text-sm font-medium text-slate-600">Approved</p>
+              <p className="text-2xl font-bold text-slate-900">{stats.approved}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow">
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
           <div className="flex items-center">
-            <div className="p-2 bg-red-100 rounded-full">
+            <div className="p-3 bg-red-50 rounded-lg">
               <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Rejected</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.rejected}</p>
+              <p className="text-sm font-medium text-slate-600">Rejected</p>
+              <p className="text-2xl font-bold text-slate-900">{stats.rejected}</p>
             </div>
           </div>
         </div>
@@ -398,8 +403,8 @@ export const UserDashboard: React.FC = () => {
 
       {/* Recent Applications */}
       <div className="mb-8">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-900">Recent Applications</h2>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-semibold text-slate-900">Recent Applications</h2>
           <div className="flex space-x-2">
             <Button
               variant="outline"
@@ -434,14 +439,14 @@ export const UserDashboard: React.FC = () => {
         ) : applications.length > 0 ? (
           <div className="space-y-4">
             {applications.map((app) => (
-              <Card key={app.id} className="hover:shadow-lg transition-shadow">
+              <Card key={app.id} className="hover:shadow-lg transition-all hover:border-amber-300 border-slate-200">
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div>
-                      <CardTitle className="text-lg">
+                      <CardTitle className="text-lg text-slate-900">
                         {app.applicationNumber}
                       </CardTitle>
-                      <CardDescription>
+                      <CardDescription className="text-slate-600">
                         Position: {getPositionTypeLabel(app.positionType)} • Submitted: {formatDate(app.submissionDate)}
                       </CardDescription>
                     </div>
@@ -453,35 +458,35 @@ export const UserDashboard: React.FC = () => {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Applicant Details</p>
-                      <p className="text-sm text-gray-900">
+                      <p className="text-sm font-medium text-slate-600">Applicant Details</p>
+                      <p className="text-sm text-slate-900 mt-1">
                         {`${app.firstName} ${app.middleName} ${app.lastName}`.trim()}
                       </p>
-                      <p className="text-sm text-gray-600">ID: {app.id}</p>
+                      <p className="text-xs text-slate-500 mt-1">ID: {app.id}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Position & Stage</p>
-                      <p className="text-sm text-gray-900">
+                      <p className="text-sm font-medium text-slate-600">Position & Stage</p>
+                      <p className="text-sm text-slate-900 mt-1">
                         {getPositionTypeLabel(app.positionType)}
                       </p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-xs text-slate-500 mt-1">
                         Stage: {getApplicationStageLabel(app.currentStage)}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Status & Timing</p>
-                      <p className="text-sm text-gray-900">
+                      <p className="text-sm font-medium text-slate-600">Status & Timing</p>
+                      <p className="text-sm text-slate-900 mt-1">
                         {getApplicationStatusLabel(app.status)}
                       </p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-xs text-slate-500 mt-1">
                         Submitted: {formatDate(app.submissionDate)}
                       </p>
                     </div>
                   </div>
-                  <div className="mt-4 pt-4 border-t">
+                  <div className="mt-4 pt-4 border-t border-slate-200">
                     <div className="flex justify-between items-center mb-2">
                       <div>
-                        <p className="text-sm text-blue-600">Current Stage: {getApplicationStageLabel(app.currentStage)}</p>
+                        <p className="text-sm text-amber-600 font-medium">Current Stage: {getApplicationStageLabel(app.currentStage)}</p>
                       </div>
                       <div className="flex space-x-2">
                         <Link to="/user/applications">
@@ -553,13 +558,13 @@ export const UserDashboard: React.FC = () => {
             ))}
           </div>
         ) : (
-          <Card>
-            <CardContent className="text-center py-8">
-              <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <Card className="border-slate-200">
+            <CardContent className="text-center py-12">
+              <svg className="w-16 h-16 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No applications yet</h3>
-              <p className="text-gray-600 mb-4">Get started by submitting your first PMC application</p>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">No applications yet</h3>
+              <p className="text-slate-600 mb-6">Get started by submitting your first PMC application</p>
               <Link to="/user/application/new">
                 <Button>Start Your First Application</Button>
               </Link>

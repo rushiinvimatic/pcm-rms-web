@@ -3,7 +3,7 @@ import { MultiStepApplicationForm } from '../../components/forms/MultiStepApplic
 
 export const NewApplicationPage: React.FC = () => {
   return (
-    <div className="py-6">
+    <div className="max-w-7xl mx-auto px-6 py-8">
       <MultiStepApplicationForm />
     </div>
   );

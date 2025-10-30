@@ -308,16 +308,32 @@ export const MultiStepApplicationForm: React.FC = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4">
-      <Card className="p-8">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Application Form
-          </h2>
-          <p className="text-gray-600">
-            Complete all steps to submit your application
-          </p>
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div className="mb-8">
+        <div className="flex items-center mb-3">
+          <div className="h-1 w-12 bg-amber-500 mr-3"></div>
+          <span className="text-slate-600 text-sm font-semibold tracking-wider uppercase">New Application</span>
         </div>
+        <h1 className="text-3xl font-bold text-slate-900 mb-2">
+          Create New Application
+        </h1>
+        <p className="text-slate-600">
+          Fill out the form below to submit a new application. All fields marked with * are required.
+        </p>
+      </div>
+
+      {/* Application Form Card */}
+      <Card className="border-slate-200 shadow-sm">
+        <div className="p-8">
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold text-slate-900 mb-2">
+              Application Form
+            </h2>
+            <p className="text-slate-600">
+              Complete all steps to submit your application
+            </p>
+          </div>
 
           {/* Step Indicator */}
           <StepIndicator
@@ -340,7 +356,7 @@ export const MultiStepApplicationForm: React.FC = () => {
                 </div>
 
                 {/* Navigation Buttons */}
-                <div className="flex justify-between pt-6 border-t">
+                <div className="flex justify-between pt-6 border-t border-slate-200">
                   <Button
                     type="button"
                     variant="outline"
@@ -383,7 +399,8 @@ export const MultiStepApplicationForm: React.FC = () => {
               </Form>
             )}
           </Formik>
-        </Card>
+        </div>
+      </Card>
     </div>
   );
 };
