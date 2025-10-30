@@ -141,7 +141,7 @@ export const paymentService = {
       //   "data": {
       //     "bdOrderId": "BD123456789",
       //     "rData": "eyJhbGciOiJSU0E...",
-      //     "paymentGatewayUrl": "https://uat1.billdesk.com/pgidsk/PGIMerchantPayment"
+      //     "paymentGatewayUrl": "https://uat1.billdesk.com/u2/web/v1_2/embeddedsdk"
       //   }
       // }
       
@@ -149,19 +149,50 @@ export const paymentService = {
         console.log('[PaymentService] Payment initiation successful');
         const { bdOrderId, rData, paymentGatewayUrl } = response.data.data;
         
-        // Automatically redirect to BillDesk payment gateway
+        // Automatically redirect to BillDesk payment gateway using POST method
         if (bdOrderId && rData && paymentGatewayUrl) {
           console.log('[PaymentService] Redirecting to BillDesk payment gateway...');
+          console.log('[PaymentService] BdOrderId:', bdOrderId);
+          console.log('[PaymentService] Payment Gateway URL:', paymentGatewayUrl);
           
-          // Construct payment URL with proper encoding
-          const paymentUrl = `${paymentGatewayUrl}?bdorderid=${encodeURIComponent(
-            bdOrderId
-          )}&rdata=${encodeURIComponent(rData)}`;
+          // BillDesk requires POST method, not GET with query params
+          // Create a form and submit it
+          const form = document.createElement('form');
+          form.method = 'POST';
+          form.action = paymentGatewayUrl;
+          form.style.display = 'none';
           
-          console.log('[PaymentService] Payment URL:', paymentUrl);
+          // Add merchantid parameter (BillDesk UAT merchant ID)
+          const merchantIdInput = document.createElement('input');
+          merchantIdInput.type = 'hidden';
+          merchantIdInput.name = 'merchantid';
+          merchantIdInput.value = 'UATPMCNTYA';
+          form.appendChild(merchantIdInput);
+          console.log('[PaymentService] Added merchantid: UATPMCNTYA');
           
-          // Redirect to BillDesk
-          window.location.href = paymentUrl;
+          // Add bdorderid parameter
+          const bdOrderInput = document.createElement('input');
+          bdOrderInput.type = 'hidden';
+          bdOrderInput.name = 'bdorderid';
+          bdOrderInput.value = bdOrderId;
+          form.appendChild(bdOrderInput);
+          console.log('[PaymentService] Added bdorderid:', bdOrderId);
+          
+          // Add rdata parameter
+          const rDataInput = document.createElement('input');
+          rDataInput.type = 'hidden';
+          rDataInput.name = 'rdata';
+          rDataInput.value = rData;
+          form.appendChild(rDataInput);
+          console.log('[PaymentService] Added rdata (length):', rData.length);
+          
+          // Append form to body and submit
+          document.body.appendChild(form);
+          console.log('[PaymentService] Form created with action:', paymentGatewayUrl);
+          console.log('[PaymentService] Submitting payment form via POST...');
+          form.submit();
+          
+          // Note: Page will redirect, so cleanup is not necessary
         }
         
         return response.data; // Return the full response structure

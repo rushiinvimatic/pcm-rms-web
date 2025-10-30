@@ -258,7 +258,7 @@ export const PaymentPage: React.FC = () => {
       const data = paymentData.data || paymentData;
       const formAction = data.formAction || data.paymentGatewayUrl || 'https://uat1.billdesk.com/u2/web/v1_2/embeddedsdk';
       const formFields: Record<string, string> = {
-        mercid: 'UATPMCNTYA',
+        merchantid: 'UATPMCNTYA',
         bdorderid: data.bdOrderId,
         rdata: data.rData
       };

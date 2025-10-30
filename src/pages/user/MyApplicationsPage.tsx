@@ -102,7 +102,7 @@ export const MyApplicationsPage: React.FC = () => {
 
           // Add required form fields for BillDesk
           const fields: Record<string, string> = {
-            mercid: 'UATPMCNTYA',
+            merchantid: 'UATPMCNTYA',
             bdorderid: paymentData.bdOrderId,
             rdata: paymentData.rData
           };
