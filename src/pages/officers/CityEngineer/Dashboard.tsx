@@ -623,59 +623,71 @@ export const CityEngineerDashboard: React.FC = () => {
           )}
         </div>
 
-        {/* Tabs and Search Section */}
-        <div className="bg-white rounded-lg shadow-sm mb-6">
-          {/* Tabs */}
-          <div className="border-b border-gray-200 px-6">
-            <nav className="-mb-px flex space-x-4">
-              <button
-                onClick={() => setActiveTab('stage1')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === 'stage1'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Stage 1 (Pre-Payment)
-                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-semibold ${
-                  activeTab === 'stage1' 
-                    ? 'bg-blue-100 text-blue-600' 
-                    : 'bg-gray-100 text-gray-600'
-                }`}>
-                  {stage1Apps.length}
-                </span>
-              </button>
-              <button
-                onClick={() => setActiveTab('stage2')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === 'stage2'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Stage 2 (Final Approval)
-                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-semibold ${
-                  activeTab === 'stage2' 
-                    ? 'bg-blue-100 text-blue-600' 
-                    : 'bg-gray-100 text-gray-600'
-                }`}>
-                  {stage2Apps.length}
-                </span>
-              </button>
-            </nav>
-          </div>
-          
-          {/* Search Bar */}
-          <div className="p-6">
-            <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <Input
-                id="search"
-                placeholder="Search by name or application number..."
-                value={filters.search}
-                onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                className="pl-10"
-              />
+        {/* Tabs and Search Section - Enhanced Professional Layout */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+          <div className="px-6 py-4">
+            <div className="flex items-center justify-between gap-4">
+              {/* Tabs */}
+              <nav className="flex space-x-2">
+                <button
+                  onClick={() => setActiveTab('stage1')}
+                  className={`px-5 py-2.5 rounded-lg font-medium text-sm whitespace-nowrap transition-all duration-200 ${
+                    activeTab === 'stage1'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md'
+                      : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
+                  }`}
+                >
+                  Stage 1 (Pre-Payment)
+                  <span className={`ml-2 px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                    activeTab === 'stage1' 
+                      ? 'bg-white/20 text-white' 
+                      : 'bg-gray-200 text-gray-700'
+                  }`}>
+                    {stage1Apps.length}
+                  </span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('stage2')}
+                  className={`px-5 py-2.5 rounded-lg font-medium text-sm whitespace-nowrap transition-all duration-200 ${
+                    activeTab === 'stage2'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md'
+                      : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
+                  }`}
+                >
+                  Stage 2 (Final Approval)
+                  <span className={`ml-2 px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                    activeTab === 'stage2' 
+                      ? 'bg-white/20 text-white' 
+                      : 'bg-gray-200 text-gray-700'
+                  }`}>
+                    {stage2Apps.length}
+                  </span>
+                </button>
+              </nav>
+              
+              {/* Enhanced Search Bar */}
+              <div className="relative flex-1 max-w-md">
+                <div className="relative">
+                  <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <Input
+                    id="search"
+                    placeholder="Search applications..."
+                    value={filters.search}
+                    onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+                    className="pl-11 pr-4 py-2.5 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg"
+                  />
+                </div>
+                {filters.search && (
+                  <button
+                    onClick={() => setFilters(prev => ({ ...prev, search: '' }))}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>

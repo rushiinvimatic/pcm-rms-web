@@ -696,63 +696,75 @@ export const JuniorEngineerDashboard: React.FC = () => {
           </Card>
         </div>
 
-        {/* Tabs and Search Section */}
-        <div className="bg-white rounded-lg shadow-sm mb-6">
-          {/* Tabs */}
-          <div className="border-b border-gray-200 px-6">
-            <nav className="-mb-px flex space-x-4">
-              <button
-                onClick={() => setActiveTab('pending')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === 'pending'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Pending Applications
-                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-semibold ${
-                  activeTab === 'pending' 
-                    ? 'bg-blue-100 text-blue-600' 
-                    : 'bg-gray-100 text-gray-600'
-                }`}>
-                  {filteredPendingApplications.length}
-                </span>
-              </button>
-              <button
-                onClick={() => setActiveTab('verification')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === 'verification'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Verification Requests
-                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-semibold ${
-                  activeTab === 'verification' 
-                    ? 'bg-blue-100 text-blue-600' 
-                    : 'bg-gray-100 text-gray-600'
-                }`}>
-                  {filteredScheduledApplications.length}
-                </span>
-              </button>
-            </nav>
-          </div>
-          
-          {/* Search Bar */}
-          <div className="p-6">
-            <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <Input
-                placeholder="Search applications..."
-                value={filters.search}
-                onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-                className="pl-10"
-              />
+        {/* Tabs and Search Section - Enhanced Professional Layout */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+          <div className="px-6 py-4">
+            <div className="flex items-center justify-between gap-4">
+              {/* Tabs */}
+              <nav className="flex space-x-2">
+                <button
+                  onClick={() => setActiveTab('pending')}
+                  className={`px-5 py-2.5 rounded-lg font-medium text-sm whitespace-nowrap transition-all duration-200 ${
+                    activeTab === 'pending'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md'
+                      : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
+                  }`}
+                >
+                  Pending Applications
+                  <span className={`ml-2 px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                    activeTab === 'pending' 
+                      ? 'bg-white/20 text-white' 
+                      : 'bg-gray-200 text-gray-700'
+                  }`}>
+                    {filteredPendingApplications.length}
+                  </span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('verification')}
+                  className={`px-5 py-2.5 rounded-lg font-medium text-sm whitespace-nowrap transition-all duration-200 ${
+                    activeTab === 'verification'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md'
+                      : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
+                  }`}
+                >
+                  Verification Requests
+                  <span className={`ml-2 px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                    activeTab === 'verification' 
+                      ? 'bg-white/20 text-white' 
+                      : 'bg-gray-200 text-gray-700'
+                  }`}>
+                    {filteredScheduledApplications.length}
+                  </span>
+                </button>
+              </nav>
+              
+              {/* Enhanced Search Bar */}
+              <div className="relative flex-1 max-w-md">
+                <div className="relative">
+                  <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <Input
+                    placeholder="Search applications..."
+                    value={filters.search}
+                    onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                    className="pl-11 pr-4 py-2.5 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg"
+                  />
+                </div>
+                {filters.search && (
+                  <button
+                    onClick={() => setFilters({ ...filters, search: '' })}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Tab Navigation and Search */}
+        {/* Tabs and Search */}
         <div className="bg-white rounded-lg shadow-sm mb-6 hidden">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4">
             <nav className="flex gap-2">

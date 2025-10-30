@@ -298,19 +298,39 @@ export const ClerkDashboard: React.FC = () => {
           </Card>
         </div>
 
-        {/* Search Section */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Search Applications</h3>
-          <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-            <Input
-              id="search"
-              placeholder="Search by name or application number..."
-              value={filters.search}
-              onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-              className="pl-10"
-            />
+        {/* Enhanced Search Section */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+          <div className="flex items-center gap-3 mb-3">
+            <Search className="h-5 w-5 text-blue-600" />
+            <h3 className="text-sm font-semibold text-gray-700">Search Applications</h3>
           </div>
+          <div className="relative max-w-2xl">
+            <div className="relative">
+              <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Input
+                id="search"
+                placeholder="Search by applicant name, application number, or certificate number..."
+                value={filters.search}
+                onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+                className="pl-11 pr-10 py-3 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg text-sm"
+              />
+            </div>
+            {filters.search && (
+              <button
+                onClick={() => setFilters(prev => ({ ...prev, search: '' }))}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
+          </div>
+          {filters.search && (
+            <p className="mt-2 text-xs text-gray-500">
+              Found {filteredApplications.length} application{filteredApplications.length !== 1 ? 's' : ''} matching "{filters.search}"
+            </p>
+          )}
         </div>
 
       {/* Applications List */}
