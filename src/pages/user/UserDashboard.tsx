@@ -10,11 +10,11 @@ import { paymentService } from '../../services/payment.service';
 import { useApiLoading } from '../../hooks/useLoading';
 import { CardSkeleton } from '../../components/common/GlobalLoader';
 import { useToast } from '../../hooks/use-toast';
-import { 
-  getPositionTypeLabel, 
-  getApplicationStageLabel, 
-  getApplicationStatusLabel, 
-  getApplicationStatusColor 
+import {
+  getPositionTypeLabel,
+  getApplicationStageLabel,
+  getApplicationStatusLabel,
+  getApplicationStatusColor
 } from '../../utils/enumMappings';
 import { ApplicationStatus } from '../../types/application';
 
@@ -76,9 +76,9 @@ export const UserDashboard: React.FC = () => {
         title: "Downloading Challan",
         description: `Preparing challan for application ${applicationNumber}...`,
       });
-      
+
       await paymentService.downloadChallanFile(applicationId, `Challan_${applicationNumber}.pdf`);
-      
+
       toast({
         title: "Download Complete",
         description: "Challan has been downloaded successfully.",
@@ -141,7 +141,7 @@ export const UserDashboard: React.FC = () => {
   const handlePayment = async (applicationId: string, applicationNumber: string) => {
     try {
       setPaymentProcessing(prev => ({ ...prev, [applicationId]: true }));
-      
+
       toast({
         title: "Initiating Payment",
         description: `Processing payment for application ${applicationNumber}...`,
@@ -149,20 +149,20 @@ export const UserDashboard: React.FC = () => {
 
       // Call the payment initiation API directly
       const response = await paymentService.initiatePayment(applicationId);
-      
+
       if (response.success && response.data) {
         console.log('Payment initiation successful:', response);
-        
+
         // Extract payment data from response
         const paymentData = response.data;
-        
+
         // Validate that we have the required BillDesk payment data
         if (paymentData.paymentGatewayUrl && paymentData.bdOrderId && paymentData.rData) {
           console.log('Creating BillDesk payment form...');
           console.log('Gateway URL:', paymentData.paymentGatewayUrl);
           console.log('BdOrderId:', paymentData.bdOrderId);
           console.log('Authorization Header:', paymentData.authorizationHeader);
-          
+
           // Create and submit form directly to BillDesk payment gateway
           const form = document.createElement('form');
           form.method = 'POST';
@@ -189,7 +189,7 @@ export const UserDashboard: React.FC = () => {
           document.body.appendChild(form);
           console.log('Submitting form to BillDesk payment gateway:', form.action);
           console.log('Form fields:', fields);
-          
+
           // Submit the form to redirect to BillDesk
           form.submit();
 
@@ -270,27 +270,27 @@ export const UserDashboard: React.FC = () => {
         setIsRefreshing(true);
         setError(null);
       }
-      
+
       await callApi(async () => {
         const response: ApiResponse = await applicationService.fetchApplications(undefined, 1, 5); // Get recent 5 applications
-        
+
         if (response.success) {
           setApplications(response.data);
           setError(null);
-          
+
           // Calculate stats based on numeric status
           const total = response.data.length;
-          const pending = response.data.filter(app => 
-            app.status === ApplicationStatus.Submitted || 
+          const pending = response.data.filter(app =>
+            app.status === ApplicationStatus.Submitted ||
             app.status === ApplicationStatus.UnderReview ||
             app.status === ApplicationStatus.PaymentPending
           ).length; // Submitted, Under Review, or Payment Pending
-          const approved = response.data.filter(app => 
+          const approved = response.data.filter(app =>
             app.status === ApplicationStatus.Completed ||
             app.status === ApplicationStatus.PaymentCompleted
           ).length; // Completed or Payment Completed
           const rejected = response.data.filter(app => app.status === ApplicationStatus.Rejected).length; // Rejected
-          
+
           setStats({ total, pending, approved, rejected });
         } else {
           setError('Failed to load applications');
@@ -324,334 +324,249 @@ export const UserDashboard: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <div className="flex items-center mb-4">
-            <div className="h-1 w-12 bg-amber-400 mr-4"></div>
-            <span className="text-slate-600 text-sm font-medium tracking-wider uppercase">Citizen Services</span>
-          </div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">
-            Welcome, {user?.name || (applications[0] ? `${applications[0].firstName} ${applications[0].lastName}` : 'Citizen')}
-          </h1>
-          <p className="text-slate-600 text-lg">
-            Manage your municipal applications and track their status through our secure government portal
-          </p>
+      <div className="mb-8">
+        <div className="flex items-center mb-4">
+          <div className="h-1 w-12 bg-amber-400 mr-4"></div>
+          <span className="text-slate-600 text-sm font-medium tracking-wider uppercase">Citizen Services</span>
         </div>
+        <h1 className="text-3xl font-bold text-slate-900 mb-2">
+          Welcome, {user?.name || (applications[0] ? `${applications[0].firstName} ${applications[0].lastName}` : 'Citizen')}
+        </h1>
+        <p className="text-slate-600 text-lg">
+          Manage your municipal applications and track their status through our secure government portal
+        </p>
+      </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-full">
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Applications</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
-              </div>
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <div className="flex items-center">
+            <div className="p-2 bg-blue-100 rounded-full">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
             </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="flex items-center">
-              <div className="p-2 bg-yellow-100 rounded-full">
-                <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">In Review</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.pending}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-full">
-                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Approved</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.approved}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="flex items-center">
-              <div className="p-2 bg-red-100 rounded-full">
-                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Rejected</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.rejected}</p>
-              </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Total Applications</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
             </div>
           </div>
         </div>
 
-        {/* Recent Applications */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-gray-900">Recent Applications</h2>
-            <div className="flex space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => fetchApplications(true)}
-                disabled={isInitialLoading || isRefreshing}
-              >
-                🔄 {isRefreshing ? 'Refreshing...' : 'Refresh'}
+        <div className="bg-white p-6 rounded-lg shadow">
+          <div className="flex items-center">
+            <div className="p-2 bg-yellow-100 rounded-full">
+              <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">In Review</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.pending}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow">
+          <div className="flex items-center">
+            <div className="p-2 bg-green-100 rounded-full">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Approved</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.approved}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow">
+          <div className="flex items-center">
+            <div className="p-2 bg-red-100 rounded-full">
+              <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Rejected</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.rejected}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Applications */}
+      <div className="mb-8">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold text-gray-900">Recent Applications</h2>
+          <div className="flex space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => fetchApplications(true)}
+              disabled={isInitialLoading || isRefreshing}
+            >
+              🔄 {isRefreshing ? 'Refreshing...' : 'Refresh'}
+            </Button>
+            <Link to="/user/applications">
+              <Button variant="outline" size="sm">
+                View All
               </Button>
-              <Link to="/user/applications">
-                <Button variant="outline" size="sm">
-                  View All
-                </Button>
-              </Link>
-            </div>
+            </Link>
           </div>
-          {isInitialLoading ? (
-            <div className="space-y-4">
-              <CardSkeleton />
-              <CardSkeleton />
-            </div>
-          ) : error ? (
-            <Card>
-              <CardContent className="text-center py-8">
-                <div className="text-red-600 mb-2">⚠️ Error</div>
-                <p className="text-red-800 mb-4">{error}</p>
-                <Button onClick={() => fetchApplications(true)} disabled={isRefreshing}>
-                  {isRefreshing ? 'Retrying...' : 'Try Again'}
-                </Button>
-              </CardContent>
-            </Card>
-          ) : applications.length > 0 ? (
-            <div className="space-y-4">
-              {applications.map((app) => (
-                <Card key={app.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <CardTitle className="text-lg">
-                          {app.applicationNumber}
-                        </CardTitle>
-                        <CardDescription>
-                          Position: {getPositionTypeLabel(app.positionType)} • Submitted: {formatDate(app.submissionDate)}
-                        </CardDescription>
-                      </div>
-                      <Badge className={getApplicationStatusColor(app.status)}>
+        </div>
+        {isInitialLoading ? (
+          <div className="space-y-4">
+            <CardSkeleton />
+            <CardSkeleton />
+          </div>
+        ) : error ? (
+          <Card>
+            <CardContent className="text-center py-8">
+              <div className="text-red-600 mb-2">⚠️ Error</div>
+              <p className="text-red-800 mb-4">{error}</p>
+              <Button onClick={() => fetchApplications(true)} disabled={isRefreshing}>
+                {isRefreshing ? 'Retrying...' : 'Try Again'}
+              </Button>
+            </CardContent>
+          </Card>
+        ) : applications.length > 0 ? (
+          <div className="space-y-4">
+            {applications.map((app) => (
+              <Card key={app.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <CardTitle className="text-lg">
+                        {app.applicationNumber}
+                      </CardTitle>
+                      <CardDescription>
+                        Position: {getPositionTypeLabel(app.positionType)} • Submitted: {formatDate(app.submissionDate)}
+                      </CardDescription>
+                    </div>
+                    <Badge className={getApplicationStatusColor(app.status)}>
+                      {getApplicationStatusLabel(app.status)}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Applicant Details</p>
+                      <p className="text-sm text-gray-900">
+                        {`${app.firstName} ${app.middleName} ${app.lastName}`.trim()}
+                      </p>
+                      <p className="text-sm text-gray-600">ID: {app.id}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Position & Stage</p>
+                      <p className="text-sm text-gray-900">
+                        {getPositionTypeLabel(app.positionType)}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Stage: {getApplicationStageLabel(app.currentStage)}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Status & Timing</p>
+                      <p className="text-sm text-gray-900">
                         {getApplicationStatusLabel(app.status)}
-                      </Badge>
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Submitted: {formatDate(app.submissionDate)}
+                      </p>
                     </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  </div>
+                  <div className="mt-4 pt-4 border-t">
+                    <div className="flex justify-between items-center mb-2">
                       <div>
-                        <p className="text-sm font-medium text-gray-600">Applicant Details</p>
-                        <p className="text-sm text-gray-900">
-                          {`${app.firstName} ${app.middleName} ${app.lastName}`.trim()}
-                        </p>
-                        <p className="text-sm text-gray-600">ID: {app.id}</p>
+                        <p className="text-sm text-blue-600">Current Stage: {getApplicationStageLabel(app.currentStage)}</p>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-600">Position & Stage</p>
-                        <p className="text-sm text-gray-900">
-                          {getPositionTypeLabel(app.positionType)}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          Stage: {getApplicationStageLabel(app.currentStage)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-600">Status & Timing</p>
-                        <p className="text-sm text-gray-900">
-                          {getApplicationStatusLabel(app.status)}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          Submitted: {formatDate(app.submissionDate)}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mt-4 pt-4 border-t">
-                      <div className="flex justify-between items-center mb-2">
-                        <div>
-                          <p className="text-sm text-blue-600">Current Stage: {getApplicationStageLabel(app.currentStage)}</p>
-                        </div>
-                        <div className="flex space-x-2">
-                          <Link to="/user/applications">
-                            <Button variant="outline" size="sm">
-                              View Details
+                      <div className="flex space-x-2">
+                        <Link to="/user/applications">
+                          <Button variant="outline" size="sm">
+                            View Details
+                          </Button>
+                        </Link>
+                        {app.status === ApplicationStatus.PaymentPending && (
+                          <Button
+                            size="sm"
+                            onClick={() => handlePayment(app.id, app.applicationNumber)}
+                            disabled={paymentProcessing[app.id]}
+                            className="bg-green-600 hover:bg-green-700"
+                          >
+                            {paymentProcessing[app.id] ? (
+                              <>
+                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Processing...
+                              </>
+                            ) : (
+                              <>
+                                💳 Pay Now
+                              </>
+                            )}
+                          </Button>
+                        )}
+                        {app.status === 0 && (
+                          <Link to="/user/application/new">
+                            <Button size="sm">
+                              Continue Application
                             </Button>
                           </Link>
-                          {app.status === ApplicationStatus.PaymentPending && (
-                            <Button 
-                              size="sm" 
-                              onClick={() => handlePayment(app.id, app.applicationNumber)}
-                              disabled={paymentProcessing[app.id]}
-                              className="bg-green-600 hover:bg-green-700"
-                            >
-                              {paymentProcessing[app.id] ? (
-                                <>
-                                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                  </svg>
-                                  Processing...
-                                </>
-                              ) : (
-                                <>
-                                  💳 Pay Now
-                                </>
-                              )}
-                            </Button>
-                          )}
-                          {app.status === 0 && (
-                            <Link to="/user/application/new">
-                              <Button size="sm">
-                                Continue Application
-                              </Button>
-                            </Link>
-                          )}
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Challan Information for Completed Payments */}
+                    {app.status === ApplicationStatus.PaymentCompleted && (
+                      <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-md">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-medium text-green-800">Payment Completed - Stage 2 Processing</p>
+                            <p className="text-xs text-green-600">
+                              Challan generated • Certificate sent to officers for signatures
+                            </p>
+                            {challanInfo[app.id] && (
+                              <p className="text-xs text-green-600 mt-1">
+                                Generated: {new Date(challanInfo[app.id].generatedAt).toLocaleDateString()}
+                              </p>
+                            )}
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleDownloadChallan(app.id, app.applicationNumber)}
+                            className="text-green-700 border-green-300 hover:bg-green-100"
+                          >
+                            📄 Download Challan
+                          </Button>
                         </div>
                       </div>
-                      
-                      {/* Challan Information for Completed Payments */}
-                      {app.status === ApplicationStatus.PaymentCompleted && (
-                        <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-md">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-sm font-medium text-green-800">Payment Completed - Stage 2 Processing</p>
-                              <p className="text-xs text-green-600">
-                                Challan generated • Certificate sent to officers for signatures
-                              </p>
-                              {challanInfo[app.id] && (
-                                <p className="text-xs text-green-600 mt-1">
-                                  Generated: {new Date(challanInfo[app.id].generatedAt).toLocaleDateString()}
-                                </p>
-                              )}
-                            </div>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleDownloadChallan(app.id, app.applicationNumber)}
-                              className="text-green-700 border-green-300 hover:bg-green-100"
-                            >
-                              📄 Download Challan
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <Card>
-              <CardContent className="text-center py-8">
-                <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No applications yet</h3>
-                <p className="text-gray-600 mb-4">Get started by submitting your first PMC application</p>
-                <Link to="/user/application/new">
-                  <Button>Start Your First Application</Button>
-                </Link>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-
-        {/* Action Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* New Application */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <svg className="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-                New Application
-              </CardTitle>
-              <CardDescription>
-                Start a new permit application process
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <Card>
+            <CardContent className="text-center py-8">
+              <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No applications yet</h3>
+              <p className="text-gray-600 mb-4">Get started by submitting your first PMC application</p>
               <Link to="/user/application/new">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                  Start New Application
-                </Button>
+                <Button>Start Your First Application</Button>
               </Link>
             </CardContent>
           </Card>
-
-          {/* Application History */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <svg className="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Application History
-              </CardTitle>
-              <CardDescription>
-                View all your submitted applications
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link to="/user/applications">
-                <Button variant="outline" className="w-full">
-                  View All Applications
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          {/* Profile Settings */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <svg className="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                Profile Settings
-              </CardTitle>
-              <CardDescription>
-                Update your profile and preferences
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link to="/user/profile">
-                <Button variant="outline" className="w-full">
-                  Manage Profile
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Logout Button */}
-        <div className="mt-8 text-center">
-          <Button 
-            variant="outline" 
-            onClick={handleLogout}
-            className="text-gray-600 hover:text-red-600 hover:border-red-300"
-          >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            Sign Out
-          </Button>
-        </div>
-
-
+        )}
+      </div>
     </div>
   );
 };

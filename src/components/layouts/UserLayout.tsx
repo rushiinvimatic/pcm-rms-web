@@ -12,9 +12,6 @@ const navItems: NavItem[] = [
   { path: '/user/dashboard', label: 'Dashboard', icon: '🏠' },
   { path: '/user/application/new', label: 'New Application', icon: '📝' },
   { path: '/user/applications', label: 'My Applications', icon: '📋' },
-  { path: '/user/profile', label: 'Profile', icon: '👤' },
-  { path: '/user/documents', label: 'Documents', icon: '📄' },
-  { path: '/user/support', label: 'Support', icon: '💬' },
 ];
 
 export const UserLayout: React.FC = () => {
