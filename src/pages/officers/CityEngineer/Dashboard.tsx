@@ -6,7 +6,7 @@ import { Card } from '../../../components/ui/card';
 import { TaskList } from '../../../components/common/TaskList';
 import { OTPModal } from '../../../components/common/OTPModal';
 import { DocumentViewer } from '../../../components/common/DocumentViewer/DocumentViewer';
-import { RefreshCw, FileText, Clock, CheckCircle, Award } from 'lucide-react';
+import { RefreshCw, FileText, Clock, CheckCircle, Award, Search } from 'lucide-react';
 import { useToast } from '../../../hooks/use-toast';
 import { useLoading } from '../../../hooks/useLoading';
 import { appointmentService } from '../../../services/appointment.service';
@@ -520,140 +520,164 @@ export const CityEngineerDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">City Engineer Dashboard</h1>
-            <p className="mt-1 text-sm text-gray-600">Final review, approval, and digital signature authority</p>
-          </div>
-          <Button onClick={() => { fetchApplications(); }} variant="outline" className="flex items-center">
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Refresh
-          </Button>
-        </div>
-
-        {/* Tabs and Search Bar */}
-        <div className="bg-white rounded-lg shadow-sm mb-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4">
-            <nav className="flex gap-2">
-              <button
-                onClick={() => setActiveTab('stage1')}
-                className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${
-                  activeTab === 'stage1'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                Stage 1 (Pre-Payment)
-                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                  activeTab === 'stage1' ? 'bg-blue-500' : 'bg-gray-200 text-gray-700'
-                }`}>
-                  {stage1Apps.length}
-                </span>
-              </button>
-              <button
-                onClick={() => setActiveTab('stage2')}
-                className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${
-                  activeTab === 'stage2'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                Stage 2 (Final Approval)
-                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                  activeTab === 'stage2' ? 'bg-blue-500' : 'bg-gray-200 text-gray-700'
-                }`}>
-                  {stage2Apps.length}
-                </span>
-              </button>
-            </nav>
-            
-            {/* Search Field */}
-            <div className="relative w-full md:w-96">
-              <Input
-                id="search"
-                placeholder="Search by name or application number..."
-                value={filters.search}
-                onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                className="pl-4"
-              />
+        {/* Header Section */}
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">City Engineer Dashboard</h1>
+              <p className="mt-1 text-sm text-gray-600">Final review, approval, and digital signature authority</p>
             </div>
+            <Button onClick={() => { fetchApplications(); }} variant="outline" className="flex items-center gap-2">
+              <RefreshCw className="w-4 h-4" />
+              Refresh
+            </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {/* Statistics Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           {activeTab === 'stage1' ? (
             <>
-              <Card className="border-l-4 border-l-blue-500 p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Total Stage 1</p>
-                    <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage1.total}</p>
-                  </div>
-                  <div className="p-3 bg-blue-100 rounded-lg">
-                    <FileText className="h-6 w-6 text-blue-600" />
-                  </div>
-                </div>
-              </Card>
-              <Card className="border-l-4 border-l-orange-500 p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Pending Review</p>
-                    <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage1.pending}</p>
-                  </div>
-                  <div className="p-3 bg-orange-100 rounded-lg">
-                    <Clock className="h-6 w-6 text-orange-600" />
+              <Card className="bg-white border-l-4 border-l-blue-500 hover:shadow-md transition-shadow">
+                <div className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Total Stage 1</p>
+                      <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage1.total}</p>
+                    </div>
+                    <div className="p-3 bg-blue-50 rounded-lg">
+                      <FileText className="h-6 w-6 text-blue-600" />
+                    </div>
                   </div>
                 </div>
               </Card>
-              <Card className="border-l-4 border-l-green-500 p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Approved for Payment</p>
-                    <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage1.approved}</p>
+              <Card className="bg-white border-l-4 border-l-orange-500 hover:shadow-md transition-shadow">
+                <div className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Pending Review</p>
+                      <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage1.pending}</p>
+                    </div>
+                    <div className="p-3 bg-orange-50 rounded-lg">
+                      <Clock className="h-6 w-6 text-orange-600" />
+                    </div>
                   </div>
-                  <div className="p-3 bg-green-100 rounded-lg">
-                    <CheckCircle className="h-6 w-6 text-green-600" />
+                </div>
+              </Card>
+              <Card className="bg-white border-l-4 border-l-green-500 hover:shadow-md transition-shadow">
+                <div className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Approved for Payment</p>
+                      <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage1.approved}</p>
+                    </div>
+                    <div className="p-3 bg-green-50 rounded-lg">
+                      <CheckCircle className="h-6 w-6 text-green-600" />
+                    </div>
                   </div>
                 </div>
               </Card>
             </>
           ) : (
             <>
-              <Card className="border-l-4 border-l-blue-500 p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Total Stage 2</p>
-                    <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage2.total}</p>
-                  </div>
-                  <div className="p-3 bg-blue-100 rounded-lg">
-                    <FileText className="h-6 w-6 text-blue-600" />
-                  </div>
-                </div>
-              </Card>
-              <Card className="border-l-4 border-l-orange-500 p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Pending Final Review</p>
-                    <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage2.pending}</p>
-                  </div>
-                  <div className="p-3 bg-orange-100 rounded-lg">
-                    <Clock className="h-6 w-6 text-orange-600" />
+              <Card className="bg-white border-l-4 border-l-blue-500 hover:shadow-md transition-shadow">
+                <div className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Total Stage 2</p>
+                      <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage2.total}</p>
+                    </div>
+                    <div className="p-3 bg-blue-50 rounded-lg">
+                      <FileText className="h-6 w-6 text-blue-600" />
+                    </div>
                   </div>
                 </div>
               </Card>
-              <Card className="border-l-4 border-l-emerald-500 p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Certificates Issued</p>
-                    <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage2.issued}</p>
+              <Card className="bg-white border-l-4 border-l-orange-500 hover:shadow-md transition-shadow">
+                <div className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Pending Final Review</p>
+                      <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage2.pending}</p>
+                    </div>
+                    <div className="p-3 bg-orange-50 rounded-lg">
+                      <Clock className="h-6 w-6 text-orange-600" />
+                    </div>
                   </div>
-                  <div className="p-3 bg-emerald-100 rounded-lg">
-                    <Award className="h-6 w-6 text-emerald-600" />
+                </div>
+              </Card>
+              <Card className="bg-white border-l-4 border-l-emerald-500 hover:shadow-md transition-shadow">
+                <div className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Certificates Issued</p>
+                      <p className="text-3xl font-bold text-gray-900 mt-2">{stats.stage2.issued}</p>
+                    </div>
+                    <div className="p-3 bg-emerald-50 rounded-lg">
+                      <Award className="h-6 w-6 text-emerald-600" />
+                    </div>
                   </div>
                 </div>
               </Card>
             </>
           )}
+        </div>
+
+        {/* Tabs and Search Section */}
+        <div className="bg-white rounded-lg shadow-sm mb-6">
+          {/* Tabs */}
+          <div className="border-b border-gray-200 px-6">
+            <nav className="-mb-px flex space-x-4">
+              <button
+                onClick={() => setActiveTab('stage1')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                  activeTab === 'stage1'
+                    ? 'border-blue-600 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Stage 1 (Pre-Payment)
+                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-semibold ${
+                  activeTab === 'stage1' 
+                    ? 'bg-blue-100 text-blue-600' 
+                    : 'bg-gray-100 text-gray-600'
+                }`}>
+                  {stage1Apps.length}
+                </span>
+              </button>
+              <button
+                onClick={() => setActiveTab('stage2')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                  activeTab === 'stage2'
+                    ? 'border-blue-600 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Stage 2 (Final Approval)
+                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-semibold ${
+                  activeTab === 'stage2' 
+                    ? 'bg-blue-100 text-blue-600' 
+                    : 'bg-gray-100 text-gray-600'
+                }`}>
+                  {stage2Apps.length}
+                </span>
+              </button>
+            </nav>
+          </div>
+          
+          {/* Search Bar */}
+          <div className="p-6">
+            <div className="relative max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Input
+                id="search"
+                placeholder="Search by name or application number..."
+                value={filters.search}
+                onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+                className="pl-10"
+              />
+            </div>
+          </div>
         </div>
 
       {/* Applications List */}

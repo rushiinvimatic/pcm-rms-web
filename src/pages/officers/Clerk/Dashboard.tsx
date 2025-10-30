@@ -12,7 +12,7 @@ import { appointmentService } from '../../../services/appointment.service';
 import { applicationService } from '../../../services/application.service';
 import { ApplicationStage } from '../../../types/application';
 import type { Application, OTPVerificationData } from '../../../types/dashboard';
-import { RefreshCw, FileText, Clock, CheckCircle, Banknote } from 'lucide-react';
+import { RefreshCw, FileText, Clock, CheckCircle, Banknote, Search } from 'lucide-react';
 
 export const ClerkDashboard: React.FC = () => {
   const [applications, setApplications] = useState<Application[]>([]);
@@ -225,76 +225,90 @@ export const ClerkDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Clerk Dashboard</h1>
-            <p className="mt-1 text-sm text-gray-600">Process post-payment applications and generate certificate numbers</p>
+        {/* Header Section */}
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Clerk Dashboard</h1>
+              <p className="mt-1 text-sm text-gray-600">Process post-payment applications and generate certificate numbers</p>
+            </div>
+            <Button onClick={() => fetchApplications()} variant="outline" className="flex items-center gap-2">
+              <RefreshCw className="w-4 h-4" />
+              Refresh
+            </Button>
           </div>
-          <Button onClick={() => fetchApplications()} variant="outline" className="flex items-center">
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Refresh
-          </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="border-l-4 border-l-blue-500 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Applications</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.total}</p>
-              </div>
-              <div className="p-3 bg-blue-100 rounded-lg">
-                <FileText className="h-6 w-6 text-blue-600" />
-              </div>
-            </div>
-          </Card>
-
-          <Card className="border-l-4 border-l-orange-500 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Pending Processing</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.pending}</p>
-              </div>
-              <div className="p-3 bg-orange-100 rounded-lg">
-                <Clock className="h-6 w-6 text-orange-600" />
+        {/* Statistics Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <Card className="bg-white border-l-4 border-l-blue-500 hover:shadow-md transition-shadow">
+            <div className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Total Applications</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">{stats.total}</p>
+                </div>
+                <div className="p-3 bg-blue-50 rounded-lg">
+                  <FileText className="h-6 w-6 text-blue-600" />
+                </div>
               </div>
             </div>
           </Card>
 
-          <Card className="border-l-4 border-l-green-500 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Processed</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.processed}</p>
-              </div>
-              <div className="p-3 bg-green-100 rounded-lg">
-                <CheckCircle className="h-6 w-6 text-green-600" />
+          <Card className="bg-white border-l-4 border-l-orange-500 hover:shadow-md transition-shadow">
+            <div className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Pending Processing</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">{stats.pending}</p>
+                </div>
+                <div className="p-3 bg-orange-50 rounded-lg">
+                  <Clock className="h-6 w-6 text-orange-600" />
+                </div>
               </div>
             </div>
           </Card>
 
-          <Card className="border-l-4 border-l-emerald-500 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Payment Completed</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.withPayment}</p>
+          <Card className="bg-white border-l-4 border-l-green-500 hover:shadow-md transition-shadow">
+            <div className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Processed</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">{stats.processed}</p>
+                </div>
+                <div className="p-3 bg-green-50 rounded-lg">
+                  <CheckCircle className="h-6 w-6 text-green-600" />
+                </div>
               </div>
-              <div className="p-3 bg-emerald-100 rounded-lg">
-                <Banknote className="h-6 w-6 text-emerald-600" />
+            </div>
+          </Card>
+
+          <Card className="bg-white border-l-4 border-l-emerald-500 hover:shadow-md transition-shadow">
+            <div className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Payment Completed</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">{stats.withPayment}</p>
+                </div>
+                <div className="p-3 bg-emerald-50 rounded-lg">
+                  <Banknote className="h-6 w-6 text-emerald-600" />
+                </div>
               </div>
             </div>
           </Card>
         </div>
 
-        {/* Search Bar */}
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+        {/* Search Section */}
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+          <h3 className="text-sm font-medium text-gray-700 mb-3">Search Applications</h3>
           <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <Input
               id="search"
               placeholder="Search by name or application number..."
               value={filters.search}
               onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-              className="pl-4"
+              className="pl-10"
             />
           </div>
         </div>

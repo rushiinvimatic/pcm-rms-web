@@ -3,6 +3,7 @@ import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
 import { Label } from '../../../components/ui/label';
 import { OTPModal } from '../../../components/common/OTPModal';
+import { RefreshCw, Search } from 'lucide-react';
 
 import { useToast } from '../../../hooks/use-toast';
 import { useLoading } from '../../../hooks/useLoading';
@@ -518,57 +519,78 @@ export const ExecutiveEngineerDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Executive Engineer Dashboard</h1>
-          <p className="mt-2 text-gray-600">
-            Manage application approvals and digital signatures
-          </p>
+        {/* Header Section */}
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Executive Engineer Dashboard</h1>
+              <p className="mt-2 text-gray-600">
+                Manage application approvals and digital signatures
+              </p>
+            </div>
+            <Button
+              onClick={() => fetchApplications()}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Refresh
+            </Button>
+          </div>
         </div>
 
-        {/* Tabs and Search Bar */}
+        {/* Tabs and Search Section */}
         <div className="bg-white rounded-lg shadow-sm mb-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4">
-            <nav className="flex gap-2">
+          {/* Tabs */}
+          <div className="border-b border-gray-200 px-6">
+            <nav className="-mb-px flex space-x-4">
               <button
                 onClick={() => setActiveTab('stage1')}
-                className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${
+                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
                   activeTab === 'stage1'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                    ? 'border-blue-600 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
                 Stage 1 - Initial Approval
-                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                  activeTab === 'stage1' ? 'bg-blue-500' : 'bg-gray-200 text-gray-700'
+                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-semibold ${
+                  activeTab === 'stage1' 
+                    ? 'bg-blue-100 text-blue-600' 
+                    : 'bg-gray-100 text-gray-600'
                 }`}>
                   {getStageApplications('stage1').length}
                 </span>
               </button>
               <button
                 onClick={() => setActiveTab('stage2')}
-                className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${
+                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
                   activeTab === 'stage2'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                    ? 'border-blue-600 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
                 Stage 2 - Final Signature
-                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                  activeTab === 'stage2' ? 'bg-blue-500' : 'bg-gray-200 text-gray-700'
+                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-semibold ${
+                  activeTab === 'stage2' 
+                    ? 'bg-blue-100 text-blue-600' 
+                    : 'bg-gray-100 text-gray-600'
                 }`}>
                   {getStageApplications('stage2').length}
                 </span>
               </button>
             </nav>
-            
-            {/* Search Field */}
-            <div className="relative w-full md:w-96">
+          </div>
+          
+          {/* Search Bar */}
+          <div className="p-6">
+            <div className="relative max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
               <Input
                 id="search"
                 placeholder="Search by application number or name..."
                 value={filters.search}
                 onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                className="pl-4"
+                className="pl-10"
               />
             </div>
           </div>

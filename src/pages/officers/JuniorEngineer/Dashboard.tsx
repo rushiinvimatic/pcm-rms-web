@@ -618,7 +618,7 @@ export const JuniorEngineerDashboard: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}
-        <div className="mb-8">
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Junior Engineer Dashboard</h1>
@@ -638,66 +638,122 @@ export const JuniorEngineerDashboard: React.FC = () => {
         </div>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="border-l-4 border-l-yellow-500">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <Card className="bg-white border-l-4 border-l-yellow-500 hover:shadow-md transition-shadow">
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 mb-1">Pending Review</p>
                   <p className="text-3xl font-bold text-gray-900">{stats.pendingReview}</p>
                 </div>
-                <div className="p-3 bg-yellow-100 rounded-lg">
-                  <Clock className="h-8 w-8 text-yellow-600" />
+                <div className="p-3 bg-yellow-50 rounded-lg">
+                  <Clock className="h-6 w-6 text-yellow-600" />
                 </div>
               </div>
             </div>
           </Card>
 
-          <Card className="border-l-4 border-l-blue-500">
+          <Card className="bg-white border-l-4 border-l-blue-500 hover:shadow-md transition-shadow">
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 mb-1">Scheduled Verification</p>
                   <p className="text-3xl font-bold text-gray-900">{stats.scheduledVerification}</p>
                 </div>
-                <div className="p-3 bg-blue-100 rounded-lg">
-                  <Calendar className="h-8 w-8 text-blue-600" />
+                <div className="p-3 bg-blue-50 rounded-lg">
+                  <Calendar className="h-6 w-6 text-blue-600" />
                 </div>
               </div>
             </div>
           </Card>
 
-          <Card className="border-l-4 border-l-green-500">
+          <Card className="bg-white border-l-4 border-l-green-500 hover:shadow-md transition-shadow">
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 mb-1">Total Processed</p>
                   <p className="text-3xl font-bold text-gray-900">{stats.totalProcessed}</p>
                 </div>
-                <div className="p-3 bg-green-100 rounded-lg">
-                  <FileText className="h-8 w-8 text-green-600" />
+                <div className="p-3 bg-green-50 rounded-lg">
+                  <FileText className="h-6 w-6 text-green-600" />
                 </div>
               </div>
             </div>
           </Card>
 
-          <Card className="border-l-4 border-l-purple-500">
+          <Card className="bg-white border-l-4 border-l-purple-500 hover:shadow-md transition-shadow">
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 mb-1">Architect Applications</p>
                   <p className="text-3xl font-bold text-gray-900">{stats.architectApplications}</p>
                 </div>
-                <div className="p-3 bg-purple-100 rounded-lg">
-                  <Building className="h-8 w-8 text-purple-600" />
+                <div className="p-3 bg-purple-50 rounded-lg">
+                  <Building className="h-6 w-6 text-purple-600" />
                 </div>
               </div>
             </div>
           </Card>
         </div>
 
-        {/* Tab Navigation and Search */}
+        {/* Tabs and Search Section */}
         <div className="bg-white rounded-lg shadow-sm mb-6">
+          {/* Tabs */}
+          <div className="border-b border-gray-200 px-6">
+            <nav className="-mb-px flex space-x-4">
+              <button
+                onClick={() => setActiveTab('pending')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                  activeTab === 'pending'
+                    ? 'border-blue-600 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Pending Applications
+                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-semibold ${
+                  activeTab === 'pending' 
+                    ? 'bg-blue-100 text-blue-600' 
+                    : 'bg-gray-100 text-gray-600'
+                }`}>
+                  {filteredPendingApplications.length}
+                </span>
+              </button>
+              <button
+                onClick={() => setActiveTab('verification')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                  activeTab === 'verification'
+                    ? 'border-blue-600 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Verification Requests
+                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-semibold ${
+                  activeTab === 'verification' 
+                    ? 'bg-blue-100 text-blue-600' 
+                    : 'bg-gray-100 text-gray-600'
+                }`}>
+                  {filteredScheduledApplications.length}
+                </span>
+              </button>
+            </nav>
+          </div>
+          
+          {/* Search Bar */}
+          <div className="p-6">
+            <div className="relative max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Input
+                placeholder="Search applications..."
+                value={filters.search}
+                onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                className="pl-10"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Tab Navigation and Search */}
+        <div className="bg-white rounded-lg shadow-sm mb-6 hidden">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4">
             <nav className="flex gap-2">
               <button
