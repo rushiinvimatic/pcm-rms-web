@@ -153,9 +153,11 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   return (
     <div className="w-full">
       <div
-        className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors
-          ${dragging ? 'border-blue-500 bg-blue-50' : error ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'}
-          ${uploading ? 'opacity-50 cursor-not-allowed' : ''}
+        className={`border-2 border-dashed rounded-lg transition-colors
+          ${dragging ? 'border-blue-500 bg-blue-50' : error ? 'border-red-300 bg-red-50' : 
+            uploadedFileId ? 'border-green-300 bg-green-50' : 'border-slate-300 hover:border-slate-400 bg-white'}
+          ${uploading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+          ${uploadedFileId ? 'p-3' : 'p-4'}
         `}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
@@ -171,93 +173,81 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           className="hidden"
         />
 
-        <div className="space-y-2">
-          <div className="flex items-center justify-center">
-            <svg
-              className="w-8 h-8 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-              />
-            </svg>
-          </div>
-
-          <div className="text-sm text-gray-600">
-            {uploading ? (
-              <div className="flex items-center justify-center space-x-2">
-                <svg className="animate-spin h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        <div>
+          {uploading ? (
+            <div className="flex items-center justify-center gap-2 py-2">
+              <svg className="animate-spin h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span className="text-sm font-medium text-blue-600">Uploading file...</span>
+            </div>
+          ) : uploadedFileId && uploadedFileName ? (
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                <div className="flex-shrink-0 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-green-900 truncate">{uploadedFileName}</p>
+                  <p className="text-xs text-green-700 font-medium">✓ Uploaded Successfully</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); handleDelete(); }}
+                className="flex-shrink-0 text-slate-400 hover:text-red-600 transition-colors p-1.5 hover:bg-white rounded"
+                title="Remove and upload different file"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
-                <span>Uploading...</span>
-              </div>
-            ) : uploadedFileId && uploadedFileName ? (
-              <div className="space-y-2">
-                <div className="bg-green-50 border border-green-200 rounded-md p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span className="text-green-800 font-medium">{uploadedFileName}</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={(e) => { e.stopPropagation(); handleDelete(); }}
-                      className="text-red-500 hover:text-red-700 transition-colors"
-                      title="Remove file"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                  <p className="text-xs text-green-600 mt-1">File ID: {uploadedFileId}</p>
+              </button>
+            </div>
+          ) : currentFile ? (
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                <div className="flex-shrink-0 w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
                 </div>
-                <p className="text-xs text-gray-500">Click to upload a different file</p>
-              </div>
-            ) : currentFile ? (
-              <div className="space-y-2">
-                <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-blue-800 font-medium">{currentFile.name}</span>
-                    <button
-                      type="button"
-                      onClick={(e) => { e.stopPropagation(); handleDelete(); }}
-                      className="text-red-500 hover:text-red-700 transition-colors"
-                      title="Remove file"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                  <p className="text-xs text-blue-600 mt-1">Ready to upload</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-slate-900 truncate">{currentFile.name}</p>
+                  <p className="text-xs text-amber-600 font-medium">⏳ Waiting to upload...</p>
                 </div>
               </div>
-            ) : (
-              <>
-                <p className="font-medium">
-                  {label} {required && <span className="text-red-500">*</span>}
-                </p>
-                <p>Drag & drop or click to select</p>
-                <p className="text-xs">
-                  Max size: {maxSize}MB | Accepted formats: {accept}
-                </p>
-              </>
-            )}
-          </div>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); handleDelete(); }}
+                className="flex-shrink-0 text-slate-400 hover:text-red-600 transition-colors p-1.5 hover:bg-white rounded"
+                title="Remove file"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          ) : (
+            <div className="text-center">
+              <div className="flex items-center justify-center mb-2">
+                <svg className="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+              </div>
+              <p className="text-sm text-slate-700 font-medium mb-1">
+                {label}
+              </p>
+              <p className="text-xs text-slate-500">Drag & drop or click to select</p>
+            </div>
+          )}
         </div>
       </div>
       
       {error && (
-        <p className="text-red-500 text-sm mt-2">{error}</p>
+        <p className="text-red-500 text-xs mt-1.5 font-medium">{error}</p>
       )}
     </div>
   );

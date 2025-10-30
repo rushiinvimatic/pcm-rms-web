@@ -27,20 +27,18 @@ export const DocumentUploadStep = ({ values, errors, touched, setFieldValue }: D
   };
 
   return (
-    <div className="space-y-8">
-      <div className="mb-6">
-        <h3 className="text-lg font-medium text-gray-900">Document Information</h3>
-        <p className="text-gray-600 mt-1">Please provide your document details and upload required documents.</p>
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold text-slate-900">Document Information</h3>
+        <p className="text-slate-600 text-sm mt-1">Upload clear copies of your documents. Ensure all numbers match your official documents.</p>
       </div>
 
-      {/* Document Numbers Section */}
+      {/* Documents Grid */}
       <div className="space-y-6">
-        <h4 className="text-md font-medium text-gray-800 border-b pb-2">Document Numbers</h4>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* PAN Card Number */}
+        {/* PAN Card */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
           <div className="space-y-2">
-            <Label htmlFor="panCardNumber" className="text-gray-700 font-medium">
+            <Label htmlFor="panCardNumber" className="text-slate-900 font-medium text-sm">
               PAN Card Number <span className="text-red-500">*</span>
             </Label>
             <Field name="panCardNumber">
@@ -52,83 +50,26 @@ export const DocumentUploadStep = ({ values, errors, touched, setFieldValue }: D
                   placeholder="ABCDE1234F"
                   maxLength={10}
                   className={cn(
+                    'uppercase h-10',
                     getFieldError('panCardNumber') 
-                      ? 'border-red-300 focus:border-red-500 focus:ring-red-200' 
-                      : 'border-gray-300'
+                      ? 'border-red-300 focus:border-red-500' 
+                      : ''
                   )}
                 />
               )}
             </Field>
             {getFieldError('panCardNumber') && (
-              <p className="text-red-500 text-sm">{getFieldError('panCardNumber')}</p>
+              <p className="text-red-500 text-xs">{getFieldError('panCardNumber')}</p>
             )}
+            <p className="text-xs text-slate-500">Format: ABCDE1234F</p>
           </div>
 
-          {/* Aadhar Card Number */}
           <div className="space-y-2">
-            <Label htmlFor="aadharCardNumber" className="text-gray-700 font-medium">
-              Aadhar Card Number <span className="text-red-500">*</span>
-            </Label>
-            <Field name="aadharCardNumber">
-              {({ field }: any) => (
-                <Input
-                  {...field}
-                  id="aadharCardNumber"
-                  type="text"
-                  placeholder="123456789012"
-                  maxLength={12}
-                  className={cn(
-                    getFieldError('aadharCardNumber') 
-                      ? 'border-red-300 focus:border-red-500 focus:ring-red-200' 
-                      : 'border-gray-300'
-                  )}
-                />
-              )}
-            </Field>
-            {getFieldError('aadharCardNumber') && (
-              <p className="text-red-500 text-sm">{getFieldError('aadharCardNumber')}</p>
-            )}
-          </div>
-
-          {/* COA Certificate Number */}
-          <div className="space-y-2">
-            <Label htmlFor="coaCardNumber" className="text-gray-700 font-medium">
-              COA Certificate Number <span className="text-red-500">*</span>
-            </Label>
-            <Field name="coaCardNumber">
-              {({ field }: any) => (
-                <Input
-                  {...field}
-                  id="coaCardNumber"
-                  type="text"
-                  placeholder="COA Certificate Number"
-                  className={cn(
-                    getFieldError('coaCardNumber') 
-                      ? 'border-red-300 focus:border-red-500 focus:ring-red-200' 
-                      : 'border-gray-300'
-                  )}
-                />
-              )}
-            </Field>
-            {getFieldError('coaCardNumber') && (
-              <p className="text-red-500 text-sm">{getFieldError('coaCardNumber')}</p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Document Uploads Section */}
-      <div className="space-y-6">
-        <h4 className="text-md font-medium text-gray-800 border-b pb-2">Document Uploads</h4>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* PAN Card Upload */}
-          <div className="space-y-2">
-            <Label className="text-gray-700 font-medium">
-              PAN Card Document <span className="text-red-500">*</span>
+            <Label className="text-slate-900 font-medium text-sm">
+              Upload PAN Card <span className="text-red-500">*</span>
             </Label>
             <FileUpload
-              label="Upload PAN Card"
+              label="Choose File"
               accept=".pdf,.jpg,.jpeg,.png"
               maxSize={5}
               required={true}
@@ -147,15 +88,45 @@ export const DocumentUploadStep = ({ values, errors, touched, setFieldValue }: D
                 setFieldValue('panCardFileName', '');
               }}
             />
+            <p className="text-xs text-slate-500">PDF, JPG, PNG • Max 5MB</p>
+          </div>
+        </div>
+
+        {/* Aadhar Card */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
+          <div className="space-y-2">
+            <Label htmlFor="aadharCardNumber" className="text-slate-900 font-medium text-sm">
+              Aadhar Card Number <span className="text-red-500">*</span>
+            </Label>
+            <Field name="aadharCardNumber">
+              {({ field }: any) => (
+                <Input
+                  {...field}
+                  id="aadharCardNumber"
+                  type="text"
+                  placeholder="123456789012"
+                  maxLength={12}
+                  className={cn(
+                    'h-10',
+                    getFieldError('aadharCardNumber') 
+                      ? 'border-red-300 focus:border-red-500' 
+                      : ''
+                  )}
+                />
+              )}
+            </Field>
+            {getFieldError('aadharCardNumber') && (
+              <p className="text-red-500 text-xs">{getFieldError('aadharCardNumber')}</p>
+            )}
+            <p className="text-xs text-slate-500">12-digit number</p>
           </div>
 
-          {/* Aadhar Card Upload */}
           <div className="space-y-2">
-            <Label className="text-gray-700 font-medium">
-              Aadhar Card Document <span className="text-red-500">*</span>
+            <Label className="text-slate-900 font-medium text-sm">
+              Upload Aadhar Card <span className="text-red-500">*</span>
             </Label>
             <FileUpload
-              label="Upload Aadhar Card"
+              label="Choose File"
               accept=".pdf,.jpg,.jpeg,.png"
               maxSize={5}
               required={true}
@@ -174,15 +145,44 @@ export const DocumentUploadStep = ({ values, errors, touched, setFieldValue }: D
                 setFieldValue('aadharCardFileName', '');
               }}
             />
+            <p className="text-xs text-slate-500">PDF, JPG, PNG • Max 5MB</p>
+          </div>
+        </div>
+
+        {/* COA Certificate */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
+          <div className="space-y-2">
+            <Label htmlFor="coaCardNumber" className="text-slate-900 font-medium text-sm">
+              COA Certificate Number <span className="text-red-500">*</span>
+            </Label>
+            <Field name="coaCardNumber">
+              {({ field }: any) => (
+                <Input
+                  {...field}
+                  id="coaCardNumber"
+                  type="text"
+                  placeholder="Certificate Number"
+                  className={cn(
+                    'h-10',
+                    getFieldError('coaCardNumber') 
+                      ? 'border-red-300 focus:border-red-500' 
+                      : ''
+                  )}
+                />
+              )}
+            </Field>
+            {getFieldError('coaCardNumber') && (
+              <p className="text-red-500 text-xs">{getFieldError('coaCardNumber')}</p>
+            )}
+            <p className="text-xs text-slate-500">Council of Architecture</p>
           </div>
 
-          {/* COA Certificate Upload */}
           <div className="space-y-2">
-            <Label className="text-gray-700 font-medium">
-              COA Certificate <span className="text-red-500">*</span>
+            <Label className="text-slate-900 font-medium text-sm">
+              Upload COA Certificate <span className="text-red-500">*</span>
             </Label>
             <FileUpload
-              label="Upload COA Certificate"
+              label="Choose File"
               accept=".pdf,.jpg,.jpeg,.png"
               maxSize={5}
               required={true}
@@ -201,15 +201,19 @@ export const DocumentUploadStep = ({ values, errors, touched, setFieldValue }: D
                 setFieldValue('coaCertificateFileName', '');
               }}
             />
+            <p className="text-xs text-slate-500">PDF, JPG, PNG • Max 5MB</p>
           </div>
+        </div>
 
-          {/* Profile Picture Upload */}
-          <div className="space-y-2">
-            <Label className="text-gray-700 font-medium">
+        {/* Profile Picture & Electricity Bill - Two columns */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Profile Picture */}
+          <div className="p-4 border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
+            <Label className="text-slate-900 font-medium text-sm mb-2 block">
               Profile Picture <span className="text-red-500">*</span>
             </Label>
             <FileUpload
-              label="Upload Profile Picture"
+              label="Choose File"
               accept=".jpg,.jpeg,.png"
               maxSize={2}
               required={true}
@@ -228,15 +232,16 @@ export const DocumentUploadStep = ({ values, errors, touched, setFieldValue }: D
                 setFieldValue('profilePictureFileName', '');
               }}
             />
+            <p className="text-xs text-slate-500 mt-2">Passport size • JPG, PNG • Max 2MB</p>
           </div>
 
-          {/* Electricity Bill Upload */}
-          <div className="space-y-2">
-            <Label className="text-gray-700 font-medium">
+          {/* Electricity Bill */}
+          <div className="p-4 border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
+            <Label className="text-slate-900 font-medium text-sm mb-2 block">
               Electricity Bill <span className="text-red-500">*</span>
             </Label>
             <FileUpload
-              label="Upload Electricity Bill"
+              label="Choose File"
               accept=".pdf,.jpg,.jpeg,.png"
               maxSize={5}
               required={true}
@@ -255,20 +260,19 @@ export const DocumentUploadStep = ({ values, errors, touched, setFieldValue }: D
                 setFieldValue('electricityBillFileName', '');
               }}
             />
+            <p className="text-xs text-slate-500 mt-2">Address proof • PDF, JPG, PNG • Max 5MB</p>
           </div>
         </div>
       </div>
 
-      <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-        <h4 className="text-sm font-medium text-gray-700 mb-2">Document Guidelines:</h4>
-        <ul className="text-sm text-gray-600 space-y-1">
-          <li>• All documents should be clear and readable</li>
-          <li>• Supported formats: PDF, JPG, JPEG, PNG</li>
-          <li>• Maximum file size: 5MB (Profile picture: 2MB)</li>
-          <li>• PAN Card format: ABCDE1234F</li>
-          <li>• Aadhar Card: 12-digit number</li>
-          <li>• Ensure all document numbers match the uploaded documents</li>
-        </ul>
+      {/* Compact Guidelines */}
+      <div className="flex items-start gap-2 p-3 bg-blue-50 rounded-md border border-blue-100">
+        <svg className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p className="text-xs text-blue-900">
+          <strong>Note:</strong> All documents must be clear and readable. Ensure document numbers match uploaded files. Accepted formats: PDF, JPG, PNG.
+        </p>
       </div>
     </div>
   );
