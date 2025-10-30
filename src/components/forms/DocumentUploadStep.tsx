@@ -33,6 +33,16 @@ export const DocumentUploadStep = ({ values, errors, touched, setFieldValue }: D
         <p className="text-slate-600 text-sm mt-1">Upload clear copies of your documents. Ensure all numbers match your official documents.</p>
       </div>
 
+      {/* Compact Guidelines */}
+      <div className="flex items-start gap-2 p-3 bg-blue-50 rounded-md border border-blue-100">
+        <svg className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p className="text-xs text-blue-900">
+          <strong>Note:</strong> All documents must be clear and readable. Ensure document numbers match uploaded files. Accepted formats: PDF, JPG, PNG.
+        </p>
+      </div>
+
       {/* Documents Grid */}
       <div className="space-y-6">
         {/* PAN Card */}
@@ -263,16 +273,6 @@ export const DocumentUploadStep = ({ values, errors, touched, setFieldValue }: D
             <p className="text-xs text-slate-500 mt-2">Address proof • PDF, JPG, PNG • Max 5MB</p>
           </div>
         </div>
-      </div>
-
-      {/* Compact Guidelines */}
-      <div className="flex items-start gap-2 p-3 bg-blue-50 rounded-md border border-blue-100">
-        <svg className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <p className="text-xs text-blue-900">
-          <strong>Note:</strong> All documents must be clear and readable. Ensure document numbers match uploaded files. Accepted formats: PDF, JPG, PNG.
-        </p>
       </div>
     </div>
   );
