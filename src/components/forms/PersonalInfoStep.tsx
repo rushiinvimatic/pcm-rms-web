@@ -80,18 +80,10 @@ export const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
 
       {values.positionType && (
         <>
-          <div className="mt-6">
-            <PositionRequirements 
-              positionId={parseInt(values.positionType)} 
-              className="bg-blue-50 p-4 rounded-lg"
-            />
-          </div>
-          
-          {/* Registration Fee Display */}
+        {/* Registration Fee Display */}
           <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-            <div className="flex items-center space-x-2">
-              <IndianRupee className="w-5 h-5 text-green-600" />
-              <h4 className="text-sm font-semibold text-green-800">Registration Fee</h4>
+            <div className="flex items-center space-x-1">
+              <h4 className="text-md font-semibold text-green-800">Registration Fee</h4>
             </div>
             <div className="mt-2">
               <p className="text-lg font-bold text-green-900">
@@ -103,6 +95,12 @@ export const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
                 </p>
               )}
             </div>
+          </div>
+          <div className="mt-6">
+            <PositionRequirements 
+              positionId={parseInt(values.positionType)} 
+              className="bg-blue-50 p-4 rounded-lg"
+            />
           </div>
         </>
       )}

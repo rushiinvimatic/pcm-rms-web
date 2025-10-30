@@ -11,7 +11,7 @@ export const POSITION_REQUIREMENTS: Record<number, PositionRequirement> = {
   0: {
     id: 0,
     name: 'Architect',
-    fees: '1500 for 3 years',
+    fees: 'No Registration Fee',
     qualifications: [
       '(A) Three years architectural assistantship or intermediate in architecture with two years experience, or',
       '(B) Diploma in Civil engineering or equivalent qualifications with two years experience.',
@@ -41,7 +41,7 @@ export const POSITION_REQUIREMENTS: Record<number, PositionRequirement> = {
   1: {
     id: 1,
     name: 'Structural Engineer',
-    fees: '2000 for 3 years',
+    fees: '₹1,500',
     qualifications: [
       '(A) Bachelor\'s degree in Civil Engineering or equivalent with specialization in Structural Engineering',
       '(B) Minimum 5 years of experience in structural design and analysis',
@@ -70,7 +70,7 @@ export const POSITION_REQUIREMENTS: Record<number, PositionRequirement> = {
   2: {
     id: 2,
     name: 'Licence Engineer',
-    fees: '1800 for 3 years',
+    fees: '₹3,000',
     qualifications: [
       '(A) Bachelor\'s degree in Civil Engineering or equivalent',
       '(B) Minimum 3 years of relevant experience',
@@ -99,7 +99,7 @@ export const POSITION_REQUIREMENTS: Record<number, PositionRequirement> = {
   3: {
     id: 3,
     name: 'Supervisor1',
-    fees: '1500 for 3 years',
+    fees: '₹900',
     qualifications: [
       '(A) Three years architectural assistantship or intermediate in architecture with two years experience, or',
       '(B) Diploma in Civil engineering or equivalent qualifications with two years experience.',
@@ -129,7 +129,7 @@ export const POSITION_REQUIREMENTS: Record<number, PositionRequirement> = {
   4: {
     id: 4,
     name: 'Supervisor2',
-    fees: '900 for 3 years',
+    fees: '₹900',
     qualifications: [
       '(A) Three years architectural assistantship or intermediate in architecture with two years experience, or',
       '(B) Diploma in Civil engineering or equivalent qualifications with two years experience.',

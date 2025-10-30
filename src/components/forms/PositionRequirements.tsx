@@ -22,9 +22,6 @@ export const PositionRequirements: React.FC<PositionRequirementsProps> = ({
         <h3 className="text-lg font-semibold text-orange-800 mb-2">
           {requirement.name}
         </h3>
-        <p className="text-orange-700 font-medium">
-          Fees: {requirement.fees}
-        </p>
       </div>
 
       {/* Qualifications */}
