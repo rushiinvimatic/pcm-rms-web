@@ -653,52 +653,65 @@ export const JuniorSupervisor2Dashboard: React.FC = () => {
           </Card>
         </div>
 
-        {/* Tabs and Search Bar */}
-        <div className="bg-white rounded-lg shadow-sm mb-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4">
-            <nav className="flex gap-2">
-              <button
-                onClick={() => setActiveTab('pending')}
-                className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${
-                  activeTab === 'pending'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                Pending Applications
-                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                  activeTab === 'pending' ? 'bg-blue-500' : 'bg-gray-200 text-gray-700'
-                }`}>
-                  {filteredPendingApplications.length}
-                </span>
-              </button>
-              <button
-                onClick={() => setActiveTab('verification')}
-                className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${
-                  activeTab === 'verification'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                Document Verification
-                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                  activeTab === 'verification' ? 'bg-blue-500' : 'bg-gray-200 text-gray-700'
-                }`}>
-                  {filteredScheduledApplications.length}
-                </span>
-              </button>
-            </nav>
-            
-            {/* Search Field */}
-            <div className="relative w-full md:w-96">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input
-                id="search"
-                placeholder="Search applications..."
-                value={filters.search}
-                onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-                className="pl-10"
-              />
+        {/* Tabs and Search Bar - Enhanced Professional Layout */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+          <div className="px-6 py-4">
+            <div className="flex items-center justify-between gap-4">
+              <nav className="flex space-x-2">
+                <button
+                  onClick={() => setActiveTab('pending')}
+                  className={`px-5 py-2.5 rounded-lg font-medium text-sm transition-all ${
+                    activeTab === 'pending'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md'
+                      : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
+                  }`}
+                >
+                  Pending Applications
+                  <span className={`ml-2 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                    activeTab === 'pending' ? 'bg-white/20 text-white' : 'bg-gray-200 text-gray-700'
+                  }`}>
+                    {filteredPendingApplications.length}
+                  </span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('verification')}
+                  className={`px-5 py-2.5 rounded-lg font-medium text-sm transition-all ${
+                    activeTab === 'verification'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md'
+                      : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
+                  }`}
+                >
+                  Document Verification
+                  <span className={`ml-2 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                    activeTab === 'verification' ? 'bg-white/20 text-white' : 'bg-gray-200 text-gray-700'
+                  }`}>
+                    {filteredScheduledApplications.length}
+                  </span>
+                </button>
+              </nav>
+              
+              {/* Search Field */}
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4 pointer-events-none" />
+                <Input
+                  id="search"
+                  placeholder="Search applications..."
+                  value={filters.search}
+                  onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                  className="pl-11 pr-4 py-2.5 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+                {filters.search && (
+                  <button
+                    onClick={() => setFilters({ ...filters, search: '' })}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    aria-label="Clear search"
+                  >
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
