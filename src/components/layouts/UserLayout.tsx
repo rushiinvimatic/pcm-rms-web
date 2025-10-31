@@ -22,7 +22,7 @@ export const UserLayout: React.FC = () => {
       <Header />
       
       {/* Navigation Bar */}
-      <nav className="bg-white border-b border-slate-200 shadow-sm">
+      <nav className="fixed top-[96px] left-0 right-0 bg-white border-b border-slate-200 shadow-sm z-40">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex space-x-8 overflow-x-auto">
             {navItems.map((item) => {
@@ -47,7 +47,7 @@ export const UserLayout: React.FC = () => {
       </nav>
       
       {/* Main Content */}
-      <main className="flex-1">
+      <main className="flex-1 pt-[164px]">
         <Outlet />
       </main>
     </div>

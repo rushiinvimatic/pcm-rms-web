@@ -7,7 +7,7 @@ export const OfficerLayout: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <Header />
-      <main className="flex-1">
+      <main className="flex-1 pt-24">
         <Outlet />
       </main>
     </div>

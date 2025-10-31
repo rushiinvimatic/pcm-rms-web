@@ -25,7 +25,7 @@ export const Header: React.FC<HeaderProps> = ({ title, subtitle }) => {
   };
 
   return (
-    <header className="bg-white border-b-2 border-amber-400 px-6 py-4 shadow-sm">
+    <header className="fixed top-0 left-0 right-0 bg-white border-b-2 border-amber-400 px-6 py-4 shadow-sm z-50">
       <div className="flex justify-between items-center">
         {/* Left side - Logo and Government Branding */}
         <div className="flex items-center space-x-4">
