@@ -12,7 +12,6 @@ interface OTPVerificationProps {
 }
 
 const OTP_LENGTH = 6;
-const MAX_ATTEMPTS = 3;
 const COOLDOWN_PERIOD = 30; // seconds
 const OTP_EXPIRY = 5 * 60; // 5 minutes in seconds
 
@@ -23,7 +22,6 @@ export const OTPVerification: React.FC<OTPVerificationProps> = ({
   onResend,
 }) => {
   const [otp, setOtp] = useState('');
-  const [attempts, setAttempts] = useState(0);
   const [cooldown, setCooldown] = useState(0);
   const [expiryTime, setExpiryTime] = useState(Date.now() + OTP_EXPIRY * 1000);
   const [isLocked, setIsLocked] = useState(false);
@@ -75,14 +73,6 @@ export const OTPVerification: React.FC<OTPVerificationProps> = ({
     if (otp.length === OTP_LENGTH && !isLocked) {
       setIsVerifying(true);
       
-      setAttempts((prev) => {
-        const newAttempts = prev + 1;
-        if (newAttempts >= MAX_ATTEMPTS) {
-          setIsLocked(true);
-        }
-        return newAttempts;
-      });
-      
       // Add a slight delay to show verification in progress
       setTimeout(() => {
         onVerify(otp);
@@ -96,7 +86,6 @@ export const OTPVerification: React.FC<OTPVerificationProps> = ({
       onResend();
       setCooldown(COOLDOWN_PERIOD);
       setExpiryTime(Date.now() + OTP_EXPIRY * 1000);
-      setAttempts(0);
       setIsLocked(false);
       setOtp('');
     }
@@ -182,18 +171,12 @@ export const OTPVerification: React.FC<OTPVerificationProps> = ({
           </div>
         ) : (
           <div className="bg-blue-50 border border-blue-100 rounded-md p-3">
-            <div className="flex justify-between items-center text-sm">
+            <div className="flex justify-center items-center text-sm">
               <div className="flex items-center">
                 <svg className="w-4 h-4 mr-1 text-blue-500" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                   <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 <span className="text-gray-700">Time: {timeRemaining}</span>
-              </div>
-              <div className="flex items-center">
-                <svg className="w-4 h-4 mr-1 text-blue-500" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-                  <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                </svg>
-                <span className="text-gray-700">Attempts: {MAX_ATTEMPTS - attempts}/{MAX_ATTEMPTS}</span>
               </div>
             </div>
           </div>
