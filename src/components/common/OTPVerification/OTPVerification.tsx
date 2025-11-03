@@ -40,7 +40,12 @@ export const OTPVerification: React.FC<OTPVerificationProps> = ({
         return;
       }
 
-      setTimeRemaining(format(remaining, 'mm:ss'));
+      // Convert milliseconds to minutes and seconds
+      const totalSeconds = Math.floor(remaining / 1000);
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      setTimeRemaining(`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+      
       timer = window.setTimeout(updateTimeRemaining, 1000);
     };
 
