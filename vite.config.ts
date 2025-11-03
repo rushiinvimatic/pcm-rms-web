@@ -18,7 +18,7 @@ export default defineConfig({
     host: true,
     proxy: {
       '/api': {
-        target: 'https://pmcrms.onrender.com',
+        target: 'http://localhost:5012',
         changeOrigin: true,
         secure: true,
         headers: {
